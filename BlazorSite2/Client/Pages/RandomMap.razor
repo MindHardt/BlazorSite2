@@ -1,0 +1,103 @@
+﻿@page "/panoramas"
+@inject IJSRuntime JSRuntime
+@using System.Globalization
+
+<div style="align-content: center">
+	<h1 class="main-text">Hello, World!</h1>
+
+	@*Prefabs*@
+	<select @onchange=@(e => SetPrefab(e.Value as string))>
+		@foreach (var prefab in prefabs)
+		{
+			<option value=@prefab.Value>@prefab.Key</option>
+		}
+	</select>
+	<br />
+
+	@*Coords*@
+	<div id="coords">
+		<b class="main-text">Долгота ↔</b>
+		<input type="number" step="0.1" @bind=@anchor.lat width="50" /> ±
+		<input type="number" step="0.05" @bind=@offset.lat /><br />
+
+		<b class="main-text">Широта ↕</b>
+		<input type="number" step="0.1" @bind=@anchor.lon width="50" /> ±
+		<input type="number" step="0.05" @bind=@offset.lon /><br />
+	</div>
+
+	@*RandomizeButton*@
+	<button @onclick=@(async _ => RandomizePosition())>
+		⏩<br />
+	</button>
+
+	@*Panorama*@
+	<details open>
+		<summary class="main-text">Панорама</summary>
+		<iframe src=@GetPanoramaWidgetUrl() width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>
+	</details>
+
+	@*Spoiler	*@
+	<details>
+		<summary class="main-text">Спойлер к панораме</summary>
+		<iframe src=@GetPositionWidgetUrl() width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>
+	</details>
+
+	@*Area*@
+	<details open>
+		<summary class="main-text">Область</summary>
+		<iframe src=@GetAreaWidgetUrl() width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>
+	</details>
+</div>
+
+@code {
+	private (float lat, float lon) anchor;
+	private (float lat, float lon) offset;
+	private (float lat, float lon)? current;
+	private string? mapLink;
+
+	private float GetOffset() => (Random.Shared.NextSingle() - 0.5f) * 2;
+	private string? Format(float? coords) => coords.HasValue ? coords.Value.ToString("0.000000", CultureInfo.InvariantCulture) : null;
+
+	private string? GetPanoramaWidgetUrl() =>
+		$"https://yandex.ru/map-widget/v1/?ll={Format(current?.lat)}%2C{Format(current?.lon)}&panorama%5Bdirection%5D=0.000000%2C0.000000&panorama%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&z=100";
+	private string GetAreaWidgetUrl() =>
+		$"https://yandex.ru/map-widget/v1/?ll={Format(anchor.lat)}%2C{Format(anchor.lon)}&rl={Format(anchor.lat)}%2C{Format(anchor.lon)}" +
+
+		$"~{Format(offset.lat)}%2C{Format(offset.lon)}" +
+		$"~0.000000%2C{Format(offset.lon * -2)}" +
+		$"~{Format(offset.lat * -2)}%2C0.000000" +
+		$"~0.000000%2C{Format(offset.lon * 2)}" +
+		$"~{Format(offset.lat * 2)}%2C0.000000" +
+		"&z=10";
+	private string? GetPositionWidgetUrl() =>
+		$"https://yandex.ru/map-widget/v1/?ll=0.0%2C0.0&mode=whatshere&whatshere%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&whatshere%5Bzoom%5D=20&z=20";
+
+
+	private void RandomizePosition()
+	{
+		float currLat = anchor.lat + (GetOffset() * offset.lat);
+		float currLon = anchor.lon + (GetOffset() * offset.lon);
+		current = (currLat, currLon);
+	}
+
+	private void SetPrefab(string? rawData)
+	{
+		if (rawData is null) return;
+		float[] data = rawData.Split(' ').Select(r => float.Parse(r, CultureInfo.InvariantCulture)).ToArray();
+
+		anchor = (data[0], data[2]);
+		offset = (data[1], data[3]);
+	}
+
+	private readonly Dictionary<string, string> prefabs = new()
+	{
+		{ "Moscow", "37.60 0.25 55.75 0.2" },
+		{ "MO", "37.60 0.4 55.75 0.3" },
+		{ "Chelyabinsk", "61.40 0.15 55.15 0.15" },
+	};
+
+	protected override void OnInitialized()
+	{
+		SetPrefab(prefabs.First().Value);
+	}
+}

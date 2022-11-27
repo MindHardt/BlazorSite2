@@ -1,0 +1,113 @@
+﻿@page "/chargen"
+@using System.Text
+@using BlazorSite2.Shared
+@using BlazorSite2.Shared.Arklens
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<h3>Генератор персонажей</h3>
+
+<p>
+	<label for="NameInput">Введите имя</label><br />
+	<input id="NameInput" type="text" @bind=@character.Name/>
+</p>
+
+<p>
+	<CharacterElementSelectComponent 
+		Name="Выберите пол"
+		Character=@character
+		Options=@Gender.All>
+	</CharacterElementSelectComponent>
+</p>
+
+<p>
+	<CharacterElementSelectComponent 
+		Name="Выберите расу"
+		Character=@character
+		Options=@Race.All>
+	</CharacterElementSelectComponent>
+
+	<br />Расовый бонус<br />
+	<select @onchange=@(e => { character.ClearRaceImpact() ; character.AllStats.First(s => s.ToString() == e.Value as string).RaceAmplified = true; })>
+		@foreach (Stat stat in character.AllStats)
+		{
+			<option>@stat.ToString()</option>
+		}
+	</select>
+	<span style="color: red">НЕ МЕНЯЙТЕ ЕСЛИ ВЫ НЕ @Race.Human</span>
+</p>
+
+<p>
+	<CharacterElementSelectComponent 
+		Name="Выберите класс"
+		Character=@character
+		Options=@Class.All>
+	</CharacterElementSelectComponent>
+
+	<br />Подкласс🚧<br />
+	<select @onchange=@(e => character.SubClass = e.Value as string)>
+	@foreach (string subclass in Class.All.SelectMany(c => c.Subclasses ?? new[] { "---" }))
+	{
+		<option>@subclass</option>
+	}
+	</select>
+	<span style="color: red">НЕ МЕНЯЙТЕ ЕСЛИ ВЫ НЕ [@(string.Join(", ", Class.All.Where(c => c.Subclasses is not null)))]</span>
+</p>
+
+<p>
+	<CharacterElementSelectComponent 
+		Name="Выберите мировоззрение"
+		Character=@character
+		Options=@Alignment.All>
+	</CharacterElementSelectComponent>
+</p>
+
+<p>
+	<StatCalculatorComponent
+		Character=@character
+		TotalPoints=44>
+	</StatCalculatorComponent>
+
+</p>
+
+<button @onclick=@(async _ => await ReloadSvg())>🔁 обновить лист</button>
+<button @onclick=@DownloadSvg disabled=@(characterSvg is null)>📲 сохранить</button>
+<br />
+@((MarkupString)(characterSvg ?? "<p>🕐...</p>"))
+
+@code {
+	private string? rawSvg;
+	private string? characterSvg;
+	private Character character = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		rawSvg = await Http.GetStringAsync("Svg");
+		await ReloadSvg();
+	}
+
+	private Task ReloadSvg() 
+	=> Task.Run(() =>
+	{
+		characterSvg = null;
+		characterSvg = character.FillSvgFile(rawSvg ?? string.Empty);
+	});
+
+	private async Task DownloadSvg()
+	{
+		using var stream = new MemoryStream(Encoding.UTF8.GetBytes(characterSvg ?? string.Empty));
+		string fileName = $"{character.Name}.AL.svg";
+
+		using var streamRef = new DotNetStreamReference(stream);
+		await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+	}
+
+	private IJSObjectReference? module;
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/CharGen.razor.js");
+	}
+}
+
+
+

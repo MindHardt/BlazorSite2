@@ -1,0 +1,47 @@
+﻿@using BlazorSite2.Shared.Arklens
+@using Un1ver5e.Web.III.Shared;
+
+<p>
+	<h2>@(PointsLeft)</h2>
+</p>
+
+@foreach (Stat stat in Character.AllStats)
+{
+	<p>
+		@stat.Emoji |
+		@(stat.DecreaseCost.AsMod() ?? "-")
+		<button 
+			disabled="@(!stat.CanDecrease)" 
+			@onclick=@(_ => stat.TryDecrease())>
+			-
+		</button>
+		<b>@stat.RawValue</b>
+		<button 
+			disabled="@(!stat.CanIncrease || stat.IncreaseCost > PointsLeft)" 
+			@onclick=@(_ => stat.TryIncrease())>
+			+
+		</button>
+		@(stat.IncreaseCost.AsMod() ?? "-")
+		&nbsp;
+		@if (stat.RaceAmplified is not null)
+		{
+			@((MarkupString)(stat.RaceAmplified.Value ? 
+			"<span style=\"color: green\">+2</span>": 
+			"<span style=\"color: red\">-2</span>"))
+		}
+		&nbsp;
+		<b>@stat.DisplayValue @stat.DisplayMod.AsMod()</b>
+	</p>
+}
+
+@code {
+	#pragma warning disable
+	[Parameter]
+	public Character Character { get; set; }
+	[Parameter]
+	public int TotalPoints { get; set; }
+
+	private IEnumerable<Stat> Stats => Character.AllStats;
+	private int PointsLeft => TotalPoints - Stats.Sum(s => s.TotalCost);
+	#pragma warning restore
+}
