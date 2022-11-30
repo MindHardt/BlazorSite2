@@ -7,7 +7,7 @@ namespace BlazorSite2.Shared.Arklens
         public VerticalAlignment Vertical { get; }
         public HorizontalAlignment Horizontal { get; }
 
-        public Alignment(HorizontalAlignment horizontal, VerticalAlignment vertical)
+        private Alignment(HorizontalAlignment horizontal, VerticalAlignment vertical)
             : base(GetEmoji(horizontal, vertical), GetName(horizontal, vertical))
         {
             Vertical = vertical;
@@ -86,19 +86,19 @@ namespace BlazorSite2.Shared.Arklens
             Chaotic = -1,
         }
 
-        public static Alignment LawfulGood => new(HorizontalAlignment.Lawful, VerticalAlignment.Good);
-        public static Alignment NeutralGood => new(HorizontalAlignment.Neutral, VerticalAlignment.Good);
-        public static Alignment ChaoticGood => new(HorizontalAlignment.Chaotic, VerticalAlignment.Good);
+        public readonly static Alignment LawfulGood = new(HorizontalAlignment.Lawful, VerticalAlignment.Good);
+        public readonly static Alignment NeutralGood = new(HorizontalAlignment.Neutral, VerticalAlignment.Good);
+        public readonly static Alignment ChaoticGood = new(HorizontalAlignment.Chaotic, VerticalAlignment.Good);
 
-        public static Alignment LawfulNeutral => new(HorizontalAlignment.Lawful, VerticalAlignment.Neutral);
-        public static Alignment Neutral => new(HorizontalAlignment.Neutral, VerticalAlignment.Neutral);
-        public static Alignment ChaoticNeutral => new(HorizontalAlignment.Chaotic, VerticalAlignment.Neutral);
+        public readonly static Alignment LawfulNeutral = new(HorizontalAlignment.Lawful, VerticalAlignment.Neutral);
+        public readonly static Alignment Neutral = new(HorizontalAlignment.Neutral, VerticalAlignment.Neutral);
+        public readonly static Alignment ChaoticNeutral = new(HorizontalAlignment.Chaotic, VerticalAlignment.Neutral);
 
-        public static Alignment LawfulEvil => new(HorizontalAlignment.Lawful, VerticalAlignment.Evil);
-        public static Alignment NeutralEvil => new(HorizontalAlignment.Neutral, VerticalAlignment.Evil);
-        public static Alignment ChaoticEvil => new(HorizontalAlignment.Chaotic, VerticalAlignment.Evil);
+        public readonly static Alignment LawfulEvil = new(HorizontalAlignment.Lawful, VerticalAlignment.Evil);
+        public readonly static Alignment NeutralEvil = new(HorizontalAlignment.Neutral, VerticalAlignment.Evil);
+        public readonly static Alignment ChaoticEvil = new(HorizontalAlignment.Chaotic, VerticalAlignment.Evil);
 
-        public static Alignment[] All => new[]
+        public readonly static IReadOnlyList<Alignment> All = new[]
         {
             LawfulGood, NeutralGood, ChaoticGood,
             LawfulNeutral, Neutral, ChaoticNeutral,

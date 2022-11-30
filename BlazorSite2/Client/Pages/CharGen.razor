@@ -28,8 +28,8 @@
 	</CharacterElementSelectComponent>
 
 	<br />Расовый бонус<br />
-	<select @onchange=@(e => { character.ClearRaceImpact() ; character.AllStats.First(s => s.ToString() == e.Value as string).RaceAmplified = true; })>
-		@foreach (Stat stat in character.AllStats)
+	<select @onchange=@(e => { character.ClearRaceImpact() ; character.EnumerateStats.First(s => s.ToString() == e.Value as string).RaceAmplified = true; })>
+		@foreach (Stat stat in character.EnumerateStats)
 		{
 			<option>@stat.ToString()</option>
 		}

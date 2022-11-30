@@ -5,7 +5,7 @@
 	<h2>@(PointsLeft)</h2>
 </p>
 
-@foreach (Stat stat in Character.AllStats)
+@foreach (Stat stat in Character.EnumerateStats)
 {
 	<p>
 		@stat.Emoji |
@@ -41,7 +41,7 @@
 	[Parameter]
 	public int TotalPoints { get; set; }
 
-	private IEnumerable<Stat> Stats => Character.AllStats;
+	private IEnumerable<Stat> Stats => Character.EnumerateStats;
 	private int PointsLeft => TotalPoints - Stats.Sum(s => s.TotalCost);
 	#pragma warning restore
 }
