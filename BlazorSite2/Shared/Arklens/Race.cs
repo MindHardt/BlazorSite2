@@ -20,13 +20,12 @@ public class Race : CharacterElement
 	/// </summary>
 	public (Stat amp1, Stat amp2, Stat red)? GetRaceImpactFor(Character character) => _statImpact(character);
 
-	public readonly static Race Human = new("🧑", "Человек", ("Умелец", "Доп. черта"), _ => null);
-    public readonly static Race Elf = new("🧝", "Эльф", ("Инсомния", "Эльфийская чуткость"), c => (c.Dex, c.Int, c.Con));
-    public readonly static Race Dwarf = new("🧔", "Дварф", ("Каменная стойкость", "Неостановимый"), c => (c.Con, c.Wis, c.Cha));
-    public readonly static Race Kitsune = new("🦊", "Кицуне", ("Регенерация", "Когти"), c => (c.Dex, c.Cha, c.Str));
-    public readonly static Race Minas = new("♉", "Минас", ("Второе дыхание", "Рога"), c => (c.Str, c.Con, c.Int));
-    public readonly static Race Serpent = new(" 🦎", "Серпент", ("Гидроадаптация", "Чешуя"), c => (c.Con, c.Int, c.Wis));
+	public static Race Human { get; } = new("🧑", "Человек", ("Умелец", "Доп. черта"), _ => null);
+    public static Race Elf { get; } = new("🧝", "Эльф", ("Инсомния", "Эльфийская чуткость"), c => (c.Dex, c.Int, c.Con));
+    public static Race Dwarf { get; } = new("🧔", "Дварф", ("Каменная стойкость", "Неостановимый"), c => (c.Con, c.Wis, c.Cha));
+    public static Race Kitsune { get; } = new("🦊", "Кицуне", ("Регенерация", "Когти"), c => (c.Dex, c.Cha, c.Str));
+    public static Race Minas { get; } = new("♉", "Минас", ("Второе дыхание", "Рога"), c => (c.Str, c.Con, c.Int));
+    public static Race Serpent { get; } = new(" 🦎", "Серпент", ("Гидроадаптация", "Чешуя"), c => (c.Con, c.Int, c.Wis));
 
-    public readonly static IReadOnlyList<Race> All
-        = new[] { Human, Elf, Dwarf, Kitsune, Minas, Serpent };
+    public static IReadOnlyList<Race> All { get; } = new[] { Human, Elf, Dwarf, Kitsune, Minas, Serpent };
 }

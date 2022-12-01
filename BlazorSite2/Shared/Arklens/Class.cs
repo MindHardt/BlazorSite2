@@ -19,19 +19,18 @@ public class Class : CharacterElement
     public IReadOnlyList<Stat> GetStatsPriorityFor(Character character) 
         => _statsPriority(character);
 
-	public readonly static Class Barbarian = new("😡", "Варвар", 12, 4, c => new[] { c.Str, c.Con, c.Dex, c.Wis, c.Cha, c.Int });
-    public readonly static Class Bard = new("🪕", "Бард", 8, 5, c => new[] { c.Cha, c.Dex, c.Wis, c.Con, c.Str, c.Int });
-    public readonly static Class BookWorm = new("🎓", "Книгочей", 6, 6, c => new[] { c.Int, c.Dex, c.Wis, c.Con, c.Cha, c.Str });
-    public readonly static Class Druid = new("🍀", "Друид", 8, 3, c => new[] { c.Wis, c.Dex, c.Con, c.Cha, c.Str, c.Int }, DruidCircle.All);
-    public readonly static Class Kineticist = new("☄", "Кинетик", 10, 3, c => new[] { c.Con, c.Dex, c.Str, c.Wis, c.Int, c.Cha });
-    public readonly static Class Monk = new("🧘‍", "Монах", 10, 4, c => new[] { c.Dex, c.Wis, c.Str, c.Con, c.Int, c.Cha });
-    public readonly static Class Paladin = new("🛡", "Паладин", 10, 3, c => new[] { c.Cha, c.Str, c.Con, c.Wis, c.Dex, c.Int }, PriestFaith.All);
-    public readonly static Class Priest = new("📜", "Жрец", 8, 4, c => new[] { c.Wis, c.Con, c.Cha, c.Str, c.Dex, c.Int }, PriestFaith.All);
-    public readonly static Class Ranger = new("🦅", "Следопыт", 8, 5, c => new[] { c.Dex, c.Wis, c.Con, c.Str, c.Cha, c.Int });
-    public readonly static Class Rogue = new("🗡", "Разбойник", 8, 5, c => new[] { c.Dex, c.Wis, c.Str, c.Int, c.Cha, c.Con });
-    public readonly static Class Warrior = new("⚔", "Воин", 10, 3, c => new[] { c.Str, c.Con, c.Dex, c.Wis, c.Cha, c.Int });
-    public readonly static Class Wizard = new("📚", "Волшебник", 6, 6, c => new[] { c.Int, c.Dex, c.Con, c.Wis, c.Str, c.Cha }, WizardSchool.All);
+	public static Class Barbarian { get; } = new("😡", "Варвар", 12, 4, c => new[] { c.Str, c.Con, c.Dex, c.Wis, c.Cha, c.Int });
+    public static Class Bard { get; } = new("🪕", "Бард", 8, 5, c => new[] { c.Cha, c.Dex, c.Wis, c.Con, c.Str, c.Int });
+    public static Class BookWorm { get; } = new("🎓", "Книгочей", 6, 6, c => new[] { c.Int, c.Dex, c.Wis, c.Con, c.Cha, c.Str });
+    public static Class Druid { get; } = new("🍀", "Друид", 8, 3, c => new[] { c.Wis, c.Dex, c.Con, c.Cha, c.Str, c.Int }, DruidCircle.All);
+    public static Class Kineticist { get; } = new("☄", "Кинетик", 10, 3, c => new[] { c.Con, c.Dex, c.Str, c.Wis, c.Int, c.Cha });
+    public static Class Monk { get; } = new("🧘‍", "Монах", 10, 4, c => new[] { c.Dex, c.Wis, c.Str, c.Con, c.Int, c.Cha });
+    public static Class Paladin { get; } = new("🛡", "Паладин", 10, 3, c => new[] { c.Cha, c.Str, c.Con, c.Wis, c.Dex, c.Int }, PriestFaith.All);
+    public static Class Priest { get; } = new("📜", "Жрец", 8, 4, c => new[] { c.Wis, c.Con, c.Cha, c.Str, c.Dex, c.Int }, PriestFaith.All);
+    public static Class Ranger { get; } = new("🦅", "Следопыт", 8, 5, c => new[] { c.Dex, c.Wis, c.Con, c.Str, c.Cha, c.Int });
+    public static Class Rogue { get; } = new("🗡", "Разбойник", 8, 5, c => new[] { c.Dex, c.Wis, c.Str, c.Int, c.Cha, c.Con });
+    public static Class Warrior { get; } = new("⚔", "Воин", 10, 3, c => new[] { c.Str, c.Con, c.Dex, c.Wis, c.Cha, c.Int });
+    public static Class Wizard { get; } = new("📚", "Волшебник", 6, 6, c => new[] { c.Int, c.Dex, c.Con, c.Wis, c.Str, c.Cha }, WizardSchool.All);
 
-    public readonly static IReadOnlyList<Class> All
-        = new[] { Barbarian, Bard, BookWorm, Druid, Kineticist, Monk, Paladin, Priest, Ranger, Rogue, Warrior, Wizard };
+    public static IReadOnlyList<Class> All { get; } = new[] { Barbarian, Bard, BookWorm, Druid, Kineticist, Monk, Paladin, Priest, Ranger, Rogue, Warrior, Wizard };
 }

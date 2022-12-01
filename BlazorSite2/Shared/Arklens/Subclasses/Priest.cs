@@ -2,25 +2,23 @@
 
 public class PriestFaith : Subclass
 {
+	public Alignment GodAlignment { get; }
 	public PriestFaith(string emoji, string name, Alignment godAlignment) : base(emoji, name)
 	{
 		GodAlignment= godAlignment;
 	}
 
-	public Alignment GodAlignment { get; }
+	public static PriestFaith Nerasith { get; } = new("⚒️", "Нерасит", Alignment.LawfulGood);
+	public static PriestFaith Solarith { get; } = new("🌞", "Солярит", Alignment.NeutralGood);
+	public static PriestFaith Yunaith { get; } = new("🌟", "Юнаит", Alignment.LawfulGood);
 
-	public static readonly PriestFaith Nerasith = new("⚒️", "Нерасит", Alignment.LawfulGood);
-	public static readonly PriestFaith Solarith = new("🌞", "Солярит", Alignment.NeutralGood);
-	public static readonly PriestFaith Yunaith = new("🌟", "Юнаит", Alignment.LawfulGood);
+	public static PriestFaith Avarith { get; } = new("⚔️", "Аварит", Alignment.LawfulNeutral);
+	public static PriestFaith Jastarith { get; } = new("⚖️", "Джастарит", Alignment.Neutral);
+	public static PriestFaith Morthith { get; } = new("💋", "Мортит", Alignment.ChaoticNeutral);
 
-	public static readonly PriestFaith Avarith = new("⚔️", "Аварит", Alignment.LawfulNeutral);
-	public static readonly PriestFaith Jastarith = new("⚖️", "Джастарит", Alignment.Neutral);
-	public static readonly PriestFaith Morthith = new("💋", "Мортит", Alignment.ChaoticNeutral);
+	public static PriestFaith Archivarith { get; } = new("💀", "Архиварит", Alignment.LawfulEvil);
+	public static PriestFaith Asterith { get; } = new("👑", "Астерит", Alignment.NeutralEvil);
+	public static PriestFaith Sangith { get; } = new("🦷", "Сангит", Alignment.ChaoticEvil);
 
-	public static readonly PriestFaith Archivarith = new("💀", "Архиварит", Alignment.LawfulEvil);
-	public static readonly PriestFaith Asterith = new("👑", "Астерит", Alignment.NeutralEvil);
-	public static readonly PriestFaith Sangith = new("🦷", "Сангит", Alignment.ChaoticEvil);
-
-	public readonly static IReadOnlyList<PriestFaith> All = new[] 
-	{ Nerasith, Solarith, Yunaith, Avarith, Jastarith, Morthith, Archivarith, Asterith, Sangith };
+	public static IReadOnlyList<PriestFaith> All { get; } = new[] { Nerasith, Solarith, Yunaith, Avarith, Jastarith, Morthith, Archivarith, Asterith, Sangith };
 }

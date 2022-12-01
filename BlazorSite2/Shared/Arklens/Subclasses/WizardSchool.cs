@@ -6,14 +6,13 @@ public class WizardSchool : Subclass
 	{
 	}
 
-	public static readonly WizardSchool Universalist = new("🧙‍", "Универсалист");
-	public static readonly WizardSchool Animaturg = new("👻", "Аниматург");
-	public static readonly WizardSchool Illusionist = new("👁‍", "Иллюзионист");
-	public static readonly WizardSchool Disruptor = new("💥", "Дизраптор");
-	public static readonly WizardSchool Transmutator = new("🔁", "Трансмутатор");
-	public static readonly WizardSchool Relocator = new("💫", "Релокатор");
-	public static readonly WizardSchool Seer = new("🔮", "Провидец");
+	public static WizardSchool Universalist { get; } = new("🧙‍", "Универсалист");
+	public static WizardSchool Animaturg { get; } = new("👻", "Аниматург");
+	public static WizardSchool Illusionist { get; } = new("👁‍", "Иллюзионист");
+	public static WizardSchool Disruptor { get; } = new("💥", "Дизраптор");
+	public static WizardSchool Transmutator { get; } = new("🔁", "Трансмутатор");
+	public static WizardSchool Relocator { get; } = new("💫", "Релокатор");
+	public static WizardSchool Seer { get; } = new("🔮", "Провидец");
 
-	public static readonly IReadOnlyList<WizardSchool> All = new[]
-	{ Universalist, Animaturg, Illusionist, Disruptor, Transmutator, Relocator, Seer };
+	public static IReadOnlyList<WizardSchool> All { get; } = new[] { Universalist, Animaturg, Illusionist, Disruptor, Transmutator, Relocator, Seer };
 }

@@ -85,22 +85,17 @@ public class Alignment : CharacterElement
         Chaotic,
     }
 
-    public readonly static Alignment LawfulGood = new(HorizontalAlignment.Lawful, VerticalAlignment.Good);
-    public readonly static Alignment NeutralGood = new(HorizontalAlignment.Neutral, VerticalAlignment.Good);
-    public readonly static Alignment ChaoticGood = new(HorizontalAlignment.Chaotic, VerticalAlignment.Good);
+    public static Alignment LawfulGood { get; } = new(HorizontalAlignment.Lawful, VerticalAlignment.Good);
+    public static Alignment NeutralGood { get; } = new(HorizontalAlignment.Neutral, VerticalAlignment.Good);
+    public static Alignment ChaoticGood { get; } = new(HorizontalAlignment.Chaotic, VerticalAlignment.Good);
 
-    public readonly static Alignment LawfulNeutral = new(HorizontalAlignment.Lawful, VerticalAlignment.Neutral);
-    public readonly static Alignment Neutral = new(HorizontalAlignment.Neutral, VerticalAlignment.Neutral);
-    public readonly static Alignment ChaoticNeutral = new(HorizontalAlignment.Chaotic, VerticalAlignment.Neutral);
+    public static Alignment LawfulNeutral { get; } = new(HorizontalAlignment.Lawful, VerticalAlignment.Neutral);
+    public static Alignment Neutral { get; } = new(HorizontalAlignment.Neutral, VerticalAlignment.Neutral);
+    public static Alignment ChaoticNeutral { get; } = new(HorizontalAlignment.Chaotic, VerticalAlignment.Neutral);
 
-    public readonly static Alignment LawfulEvil = new(HorizontalAlignment.Lawful, VerticalAlignment.Evil);
-    public readonly static Alignment NeutralEvil = new(HorizontalAlignment.Neutral, VerticalAlignment.Evil);
-    public readonly static Alignment ChaoticEvil = new(HorizontalAlignment.Chaotic, VerticalAlignment.Evil);
+    public static Alignment LawfulEvil { get; } = new(HorizontalAlignment.Lawful, VerticalAlignment.Evil);
+    public static Alignment NeutralEvil { get; } = new(HorizontalAlignment.Neutral, VerticalAlignment.Evil);
+    public static Alignment ChaoticEvil { get; } = new(HorizontalAlignment.Chaotic, VerticalAlignment.Evil);
 
-    public readonly static IReadOnlyList<Alignment> All = new[]
-    {
-        LawfulGood, NeutralGood, ChaoticGood,
-        LawfulNeutral, Neutral, ChaoticNeutral,
-        LawfulEvil, NeutralEvil, ChaoticEvil,
-    };
+    public static IReadOnlyList<Alignment> All { get; } = new[] { LawfulGood, NeutralGood, ChaoticGood, LawfulNeutral, Neutral, ChaoticNeutral, LawfulEvil, NeutralEvil, ChaoticEvil };
 }

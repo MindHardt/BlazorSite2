@@ -6,12 +6,11 @@ public class DruidCircle : Subclass
 	{
 	}
 
-	public static readonly DruidCircle Floralyth = new("🌿", "Флорилит");
-	public static readonly DruidCircle Zoolyth = new("🦌", "Зоолит");
-	public static readonly DruidCircle Ethnolyth = new("🦂", "Этнолит");
-	public static readonly DruidCircle Decalyth = new("🍖", "Декалит");
-	public static readonly DruidCircle Micolyth = new("🍄", "Миколит");
+	public static DruidCircle Floralyth { get; } = new("🌿", "Флорилит");
+	public static DruidCircle Zoolyth { get; } = new("🦌", "Зоолит");
+	public static DruidCircle Ethnolyth { get; } = new("🦂", "Этнолит");
+	public static DruidCircle Decalyth { get; } = new("🍖", "Декалит");
+	public static DruidCircle Micolyth { get; } = new("🍄", "Миколит");
 	
-	public static readonly IReadOnlyList<DruidCircle> All = new[] 
-	{ Floralyth, Zoolyth, Ethnolyth, Decalyth, Micolyth };
+	public static IReadOnlyList<DruidCircle> All { get; } = new[] { Floralyth, Zoolyth, Ethnolyth, Decalyth, Micolyth };
 }
