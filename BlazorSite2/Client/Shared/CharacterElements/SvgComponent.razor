@@ -9,12 +9,12 @@
 @((MarkupString)(characterSvg ?? "<p>🕐...</p>"))
 
 @code {
-	private string? rawSvg;
+	private static string? rawSvg;
 	private string? characterSvg;
 
 	protected override async Task OnInitializedAsync()
 	{
-		rawSvg = await Http.GetStringAsync("Svg");
+		rawSvg = rawSvg ?? await Http.GetStringAsync("files/raw.svg");
 		_ = ReloadSvg();
 	}
 

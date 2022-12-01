@@ -1,7 +1,9 @@
 ﻿@using BlazorSite2.Shared.Arklens;
 
 @code {
-#pragma warning disable 
+	protected override void OnParametersSet()
+		=> Character.PropertyChanged += (_, _) => this.StateHasChanged();
+#pragma warning disable
 	[Parameter]
 	public Character Character { get; set; }
 #pragma warning restore

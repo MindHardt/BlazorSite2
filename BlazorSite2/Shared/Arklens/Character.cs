@@ -1,12 +1,22 @@
 ﻿using BlazorSite2.Shared.Arklens.Subclasses;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Un1ver5e.Web.III.Shared;
 
 namespace BlazorSite2.Shared.Arklens;
-public record Character
+public record Character : INotifyPropertyChanged
 {
 	private Race? race;
+	private string? name;
+	private Gender? gender;
 	private Class? @class;
+	private Alignment? alignment;
+	private Subclass? subClass;
+
+
+	public event PropertyChangedEventHandler? PropertyChanged;
+
 
 	public Stat Str { get; } = new(Stat.MinValue, "💪", "СИЛ");
 	public Stat Dex { get; } = new(Stat.MinValue, "🏃‍", "ЛВК");
@@ -14,12 +24,63 @@ public record Character
 	public Stat Int { get; } = new(Stat.MinValue, "🧠", "ИНТ");
 	public Stat Wis { get; } = new(Stat.MinValue, "🦉", "МДР");
 	public Stat Cha { get; } = new(Stat.MinValue, "👄", "ХАР");
-	public Race? Race { get => race; set { race = value; ApplyRaceImpact(); } }
-	public string? Name { get; set; }
-	public Gender? Gender { get; set; }
-	public Class? Class { get => @class; set { @class = value; SubClass = null; } }
-	public Alignment? Alignment { get; set; }
-	public Subclass? SubClass { get; set; }
+	public Race? Race
+	{
+		get => race;
+		set
+		{
+			race = value;
+			ApplyRaceImpact();
+			OnPropertyChanged(nameof(Race));
+		}
+	}
+	public string? Name
+	{
+		get => name;
+		set
+		{
+			name = value;
+			OnPropertyChanged(nameof(Name));
+		}
+	}
+	public Gender? Gender
+	{
+		get => gender;
+		set
+		{
+			gender = value;
+			OnPropertyChanged(nameof(Gender));
+		}
+	}
+	public Class? Class
+	{
+		get => @class;
+		set
+		{
+			@class = value;
+			SubClass = null;
+			OnPropertyChanged(nameof(Class));
+		}
+	}
+	public Alignment? Alignment
+	{
+		get => alignment;
+		set
+		{
+			alignment = value;
+			OnPropertyChanged(nameof(Alignment));
+		}
+	}
+	public Subclass? SubClass 
+	{ 
+		get => subClass; 
+		set
+		{
+			subClass = value;
+			OnPropertyChanged(nameof(SubClass));
+		}
+	}
+	
 
 	/// <summary>
 	/// Gets all six character stats.
@@ -40,7 +101,11 @@ public record Character
 	public void ClearRaceImpact()
 	{
 		foreach (Stat stat in EnumerateStats()) stat.RaceAmplified = null;
+		OnPropertyChanged(nameof(Race));
 	}
+
+	private void OnPropertyChanged([CallerMemberName] string prop = "")
+		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 
 	public string FillSvgFile(string rawSvg)
 		=> new StringBuilder(rawSvg)

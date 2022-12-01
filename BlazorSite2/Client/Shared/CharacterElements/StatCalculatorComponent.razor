@@ -1,12 +1,14 @@
-﻿@using BlazorSite2.Shared.Arklens
+﻿@inherits CharacterComponentBase
+@using BlazorSite2.Shared.Arklens
 @using Un1ver5e.Web.III.Shared;
+@inject IJSRuntime JS
 
 <p>
 	<h2>@(PointsLeft)</h2>
 </p>
-<button @onclick=@AutoAssign disabled=@(Character.Class is null)>🔂 Автоматически</button>
+<button @onclick=@AutoAssign>🔂 Автоматически</button>
 
-@foreach (Stat stat in Stats)
+@foreach (Stat stat in Character.EnumerateStats())
 {
 	<p>
 		@stat.Emoji |
@@ -36,14 +38,16 @@
 }
 
 @code {
-	#pragma warning disable
-	[Parameter]
-	public Character Character { get; set; }
 	[Parameter]
 	public int TotalPoints { get; set; }
 
-	private void AutoAssign()
+	private async Task AutoAssign()
 	{
+		if (Character.Class is null)
+		{
+			await JS.AlertAsync("Сначала вам нужно выбрать класс!");
+			return;
+		}
 		int[] values = { 16, 14, 14, 12, 10, 8 };
 		IReadOnlyList<Stat> stats = Character.Class!.GetStatsPriorityFor(Character);
 		for (int i = 0; i < stats.Count; i++)
@@ -52,7 +56,5 @@
 		}
 	}
 
-	private IEnumerable<Stat> Stats => Character.EnumerateStats();
-	private int PointsLeft => TotalPoints - Stats.Sum(s => s.TotalCost);
-	#pragma warning restore
+	private int PointsLeft => TotalPoints - Character.EnumerateStats().Sum(s => s.TotalCost);
 }

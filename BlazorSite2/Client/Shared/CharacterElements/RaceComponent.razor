@@ -22,8 +22,13 @@
 
 @code {
 	private void SetRace(ChangeEventArgs e) 
-	=> Character.Race = Race.All.GetByName(e.Value as string);
+	{
+		Character.Race = Race.All.GetByName(e.Value as string);
+	}
 
 	private void SetHumanBonus(ChangeEventArgs e)
-	=> Character.EnumerateStats().GetByName(e.Value as string)!.RaceAmplified = true;
+	{
+		Character.ClearRaceImpact();
+		Character.EnumerateStats().GetByName(e.Value as string)!.RaceAmplified = true;
+	}
 }

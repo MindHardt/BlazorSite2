@@ -25,7 +25,7 @@ public class Class : CharacterElement
     public readonly static Class Druid = new("🍀", "Друид", 8, 3, c => new[] { c.Wis, c.Dex, c.Con, c.Cha, c.Str, c.Int }, DruidCircle.All);
     public readonly static Class Kineticist = new("☄", "Кинетик", 10, 3, c => new[] { c.Con, c.Dex, c.Str, c.Wis, c.Int, c.Cha });
     public readonly static Class Monk = new("🧘‍", "Монах", 10, 4, c => new[] { c.Dex, c.Wis, c.Str, c.Con, c.Int, c.Cha });
-    public readonly static Class Paladin = new("🛡", "Паладин", 10, 3, c => new[] { c.Cha, c.Str, c.Con, c.Wis, c.Cha, c.Int }, PriestFaith.All);
+    public readonly static Class Paladin = new("🛡", "Паладин", 10, 3, c => new[] { c.Cha, c.Str, c.Con, c.Wis, c.Dex, c.Int }, PriestFaith.All);
     public readonly static Class Priest = new("📜", "Жрец", 8, 4, c => new[] { c.Wis, c.Con, c.Cha, c.Str, c.Dex, c.Int }, PriestFaith.All);
     public readonly static Class Ranger = new("🦅", "Следопыт", 8, 5, c => new[] { c.Dex, c.Wis, c.Con, c.Str, c.Cha, c.Int });
     public readonly static Class Rogue = new("🗡", "Разбойник", 8, 5, c => new[] { c.Dex, c.Wis, c.Str, c.Int, c.Cha, c.Con });
