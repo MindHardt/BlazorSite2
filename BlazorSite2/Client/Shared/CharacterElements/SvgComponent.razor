@@ -1,0 +1,37 @@
+﻿@using System.Text;
+@inject IJSRuntime JS
+@inject HttpClient Http
+@inherits CharacterComponentBase
+
+<button @onclick=@ReloadSvg>🔁 обновить лист</button>
+<button @onclick=@DownloadSvg disabled=@(characterSvg is null)>📲 сохранить</button>
+<br />
+@((MarkupString)(characterSvg ?? "<p>🕐...</p>"))
+
+@code {
+	private string? rawSvg;
+	private string? characterSvg;
+
+	protected override async Task OnInitializedAsync()
+	{
+		rawSvg = await Http.GetStringAsync("Svg");
+		_ = ReloadSvg();
+	}
+
+	private Task ReloadSvg()
+	=> Task.Run(() =>
+	{
+		characterSvg = Character.FillSvgFile(rawSvg ?? string.Empty);
+		this.StateHasChanged();
+	});
+
+	private async Task DownloadSvg()
+	{
+		using var stream = new MemoryStream(Encoding.UTF8.GetBytes(characterSvg ?? string.Empty));
+		string fileName = $"{Character.Name}.AL.svg";
+
+		using var streamRef = new DotNetStreamReference(stream);
+		await JS.InvokeAsync<IJSObjectReference>("import", "./js/download.js");
+		await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+	}
+}

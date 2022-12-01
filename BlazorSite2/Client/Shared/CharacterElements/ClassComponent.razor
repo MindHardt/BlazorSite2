@@ -1,0 +1,30 @@
+﻿@using BlazorSite2.Shared.Arklens;
+@using BlazorSite2.Shared.Arklens.Subclasses;
+@using Un1ver5e.Web.III.Shared;
+@inherits CharacterComponentBase
+
+<select @onchange=@SetClass>
+	<option selected disabled hidden>Выберите класс</option>
+	@foreach (Class _class in Class.All)
+	{
+		<option value=@_class.Name>@_class.ToString()</option>
+	}
+</select>
+@if (Character.Class?.Subclasses is not null)
+{
+	<select @onchange=@SetSubclass>
+		<option selected disabled hidden>Выберите подкласс @Character.Class.Emoji</option>
+		@foreach (Subclass subclass in Character.Class.Subclasses)
+		{
+			<option value=@subclass.Name>@subclass.ToString()</option>
+		}
+	</select>
+}
+
+@code {
+	private void SetClass(ChangeEventArgs e)
+	=> Character.Class = Class.All.GetByName(e.Value as string);
+
+	private void SetSubclass(ChangeEventArgs e)
+	=> Character.SubClass = Character.Class!.Subclasses!.GetByName(e.Value as string);
+}

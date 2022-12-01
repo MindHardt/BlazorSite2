@@ -1,0 +1,49 @@
+﻿@using BlazorSite2.Shared.Arklens;
+@using BlazorSite2.Shared.Arklens.Subclasses;
+@using Un1ver5e.Web.III.Shared;
+@using static BlazorSite2.Shared.Arklens.Alignment;
+@inherits CharacterComponentBase
+
+<select @onchange=@SetAlignment @onfocus=@StateHasChanged>
+	<option selected disabled hidden>Выберите мировоззрение</option>
+	@foreach (Alignment alignment in Alignments)
+	{
+		<option value=@alignment.Name>@alignment.ToString()</option>
+	}
+</select>
+
+@code {
+	private void SetAlignment(ChangeEventArgs e)
+		=> Character.Alignment = Alignments.GetByName(e.Value as string);
+
+	private IEnumerable<Alignment> Alignments
+	{
+		get
+		{
+			if (Character.Class == Class.Barbarian)
+			{
+				return Alignment.All.Where(a => a.Horizontal != HorizontalAlignment.Lawful);
+			}
+			if (Character.Class == Class.Druid)
+			{
+				return Alignment.All.Where(a => a.Horizontal == HorizontalAlignment.Neutral || a.Vertical == VerticalAlignment.Neutral);
+			}
+			if (Character.Class == Class.Monk)
+			{
+				return Alignment.All.Where(a => a.Horizontal == HorizontalAlignment.Lawful);
+			}
+			if (Character.SubClass is PriestFaith faith)
+			{
+				if (Character.Class == Class.Priest)
+				{
+					return Alignment.All.Where(a => a.DistanceTo(faith.GodAlignment) <= 1);
+				}
+				else
+				{
+					return new[] { faith.GodAlignment };
+				}
+			}
+			return Alignment.All;
+		}
+	}
+}

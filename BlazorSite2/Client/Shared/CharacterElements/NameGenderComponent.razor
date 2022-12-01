@@ -1,5 +1,20 @@
-﻿<h3>NameGenderComponent</h3>
+﻿@using BlazorSite2.Shared.Arklens;
+@using Un1ver5e.Web.III.Shared;
+@inherits CharacterComponentBase
+
+<input type="text" maxlength="20" @onchange=SetName placeholder="Введите имя" value=@Character.Name/>
+<select @onchange=SetGender>
+	<option selected disabled hidden>@(Character.Gender?.ToString() ?? "Выберите пол")</option>
+	@foreach(Gender gender in Gender.All)
+	{
+		<option value=@gender.Name>@gender.ToString()</option>
+	}
+</select>
 
 @code {
+	private void SetName(ChangeEventArgs e)
+	=> Character.Name = e.Value as string;
 
+	private void SetGender(ChangeEventArgs e)
+	=> Character.Gender = Gender.All.GetByName(e.Value as string);
 }

@@ -2,6 +2,8 @@
 @inject IJSRuntime JSRuntime
 @using System.Globalization
 
+<PageTitle>Карты</PageTitle>
+
 <div style="align-content: center">
 	<h1 class="main-text">Hello, World!</h1>
 
@@ -53,7 +55,6 @@
 	private (float lat, float lon) anchor;
 	private (float lat, float lon) offset;
 	private (float lat, float lon)? current;
-	private string? mapLink;
 
 	private float GetOffset() => (Random.Shared.NextSingle() - 0.5f) * 2;
 	private string? Format(float? coords) => coords.HasValue ? coords.Value.ToString("0.000000", CultureInfo.InvariantCulture) : null;
