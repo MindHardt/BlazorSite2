@@ -4,6 +4,7 @@
 <p>
 	<h2>@(PointsLeft)</h2>
 </p>
+<button @onclick=@AutoAssign disabled=@(Character.Class is null)>🔂 Автоматически</button>
 
 @foreach (Stat stat in Stats)
 {
@@ -40,6 +41,16 @@
 	public Character Character { get; set; }
 	[Parameter]
 	public int TotalPoints { get; set; }
+
+	private void AutoAssign()
+	{
+		int[] values = { 16, 14, 14, 12, 10, 8 };
+		IReadOnlyList<Stat> stats = Character.Class!.GetStatsPriorityFor(Character);
+		for (int i = 0; i < stats.Count; i++)
+		{
+			stats[i].RawValue = values[i];
+		}
+	}
 
 	private IEnumerable<Stat> Stats => Character.EnumerateStats();
 	private int PointsLeft => TotalPoints - Stats.Sum(s => s.TotalCost);
