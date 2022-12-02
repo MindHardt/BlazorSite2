@@ -3,21 +3,23 @@
 @using BlazorSite2.Client.Shared.CharacterElements
 @using BlazorSite2.Shared
 @using BlazorSite2.Shared.Arklens
+@inject IJSRuntime JS
 
 <PageTitle>Персонажи</PageTitle>
 
-<button @onclick=@PrevTab>⏪</button>
-@for (int i = MinTab; i < tab; i++)
-{
-	<span>@i</span>
-}
-<span style="font-size: 18px; color: seagreen">@tab</span>
-@for (int i = tab + 1; i <= MaxTab; i++)
-{
-	<span>@i</span>
-}
-<button @onclick=@NextTab>⏩</button>
-@tab
+<div tabindex="0" @ref=@Buttons @onkeydown=KeyDown>
+	<button @onclick=@PrevTab>⏪</button>
+	@for (int i = MinTab; i < tab; i++)
+	{
+		<span>@i</span>
+	}
+	<span style="font-size: 18px; color: seagreen"><u>@tab</u></span>
+	@for (int i = tab + 1; i <= MaxTab; i++)
+	{
+		<span>@i</span>
+	}
+	<button @onclick=@NextTab>⏩</button>
+</div>
 @if (tab == 1)
 {
 	<p>
@@ -58,6 +60,7 @@ else if (tab == 6)
 
 @code {
 	private Character character = new();
+	private ElementReference Buttons;
 
 	private const int MinTab = 1;
 	private const int MaxTab = 6;
@@ -67,7 +70,21 @@ else if (tab == 6)
 	private void NextTab() => tab = Math.Min(tab + 1, MaxTab);
 	private void PrevTab() => tab = Math.Max(tab - 1, MinTab);
 	private void JumpTo(int newTab) => tab = newTab is >= MinTab and <= MaxTab ? newTab : tab;
+
+	private void KeyDown(KeyboardEventArgs e)
+	{
+		//Action action = e.Key switch
+		//{
+		//	"a" => () => PrevTab(),
+		//	"d" => () => NextTab(),
+		//	_ => () => { },
+		//};
+		//action();
+	}
+
+	//protected override async Task OnAfterRenderAsync(bool firstRender)
+	//{
+	//	await JS.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
+	//	await JS.InvokeVoidAsync("setFocusToElement", Buttons);
+	//}
 }
-
-
-

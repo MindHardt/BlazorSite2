@@ -82,7 +82,11 @@ public record Character : INotifyPropertyChanged
 			OnPropertyChanged(nameof(SubClass));
 		}
 	}
-	
+
+
+	public int? HpGain => Class?.HpGain + Con.DisplayMod;
+	public int? Skillpoints => Class?.SkillPoints + Int.DisplayMod + (Race == Race.Human ? 1 : 0);
+
 
 	/// <summary>
 	/// Gets all six character stats.
@@ -90,6 +94,7 @@ public record Character : INotifyPropertyChanged
 	/// <returns></returns>
 	public IReadOnlyList<Stat> EnumerateStats()
 		=> new[] { Str, Dex, Con, Int, Wis, Cha };
+
 
 	private void ApplyRaceImpact()
 	{
@@ -106,11 +111,19 @@ public record Character : INotifyPropertyChanged
 		OnPropertyChanged(nameof(Race));
 	}
 
+
+	public Character()
+	{
+		foreach (Stat stat in EnumerateStats())
+		{
+			stat.PropertyChanged += (_, _) => OnPropertyChanged(nameof(stat));
+		}
+	}
+
+
 	private void OnPropertyChanged([CallerMemberName] string prop = "")
 		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 
-	public int? HpGain => Class?.HpGain + Con.DisplayMod;
-	public int? Skillpoints => Class?.SkillPoints + Int.DisplayMod + (Race == Race.Human ? 1 : 0);
 
 	private string GetRegexText(Match match)
 	{

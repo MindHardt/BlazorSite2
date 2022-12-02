@@ -3,7 +3,7 @@
 @inject HttpClient Http
 @inherits CharacterComponentBase
 
-<button @onclick=@ReloadSvg>🔁 обновить лист</button>
+@*<button @onclick=@ReloadSvg>🔁 обновить лист</button>*@
 <button @onclick=@DownloadSvg disabled=@(characterSvg is null)>📲 сохранить</button>
 <br />
 @((MarkupString)(characterSvg ?? "<p>🕐...</p>"))
@@ -16,6 +16,7 @@
 	{
 		rawSvg = rawSvg ?? await Http.GetStringAsync("files/raw.svg");
 		_ = ReloadSvg();
+		Character.PropertyChanged += async (_, _) => await ReloadSvg();
 	}
 
 	private Task ReloadSvg()
@@ -31,7 +32,7 @@
 		string fileName = $"{Character.Name}.AL.svg";
 
 		using var streamRef = new DotNetStreamReference(stream);
-		await JS.InvokeAsync<IJSObjectReference>("import", "./js/download.js");
+		await JS.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
 		await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
 	}
 }

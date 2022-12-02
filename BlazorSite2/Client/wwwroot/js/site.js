@@ -9,3 +9,7 @@
     anchorElement.remove();
     URL.revokeObjectURL(url);
 }
+
+window.setFocusToElement = (element) => {
+    element.focus();
+};

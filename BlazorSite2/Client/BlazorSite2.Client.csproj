@@ -26,7 +26,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\files\raw.svg" />
-    <None Include="wwwroot\js\download.js" />
+    <None Include="wwwroot\js\site.js" />
   </ItemGroup>
 
 </Project>
