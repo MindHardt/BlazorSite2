@@ -21,5 +21,4 @@ RUN dotnet publish "BlazorSite2.Server.csproj" -c Release -o /app/publish -r lin
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY ["BlazorSite2/Server/raw.svg", "/app/"]
 ENTRYPOINT ["dotnet", "BlazorSite2.Server.dll"]
