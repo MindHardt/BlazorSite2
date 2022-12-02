@@ -3,7 +3,7 @@
 @inherits CharacterComponentBase
 
 <select @onchange=@SetRace>
-	<option selected disabled hidden>Выберите расу</option>
+	<option selected disabled hidden>@(Character.Race?.ToString() ?? "Выберите расу")</option>
 	@foreach(Race race in Race.All)
 	{
 		<option value=@race.Name>@race.ToString()</option>
