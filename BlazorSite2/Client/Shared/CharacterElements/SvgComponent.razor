@@ -20,9 +20,13 @@
 	}
 
 	private Task ReloadSvg()
-	=> Task.Run(() =>
+	=> Task.Run(async () =>
 	{
-		characterSvg = Character.FillSvgFile(rawSvg ?? string.Empty);
+		byte[] portraitFile = Character.Race is null || Character.Gender is null ? 
+		Array.Empty<byte>() :
+		await Http.GetByteArrayAsync($"files/{Character.Race.Name}.{Character.Gender.Name[0]}.png");
+
+		characterSvg = Character.FillSvgFile(rawSvg ?? string.Empty, portraitFile);
 		this.StateHasChanged();
 	});
 

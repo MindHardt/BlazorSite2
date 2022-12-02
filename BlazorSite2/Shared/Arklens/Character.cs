@@ -1,9 +1,7 @@
 ﻿using BlazorSite2.Shared.Arklens.Subclasses;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
 using Un1ver5e.Web.III.Shared;
 
 namespace BlazorSite2.Shared.Arklens;
@@ -73,9 +71,9 @@ public record Character : INotifyPropertyChanged
 			OnPropertyChanged(nameof(Alignment));
 		}
 	}
-	public Subclass? SubClass 
-	{ 
-		get => subClass; 
+	public Subclass? SubClass
+	{
+		get => subClass;
 		set
 		{
 			subClass = value;
@@ -124,8 +122,7 @@ public record Character : INotifyPropertyChanged
 	private void OnPropertyChanged([CallerMemberName] string prop = "")
 		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 
-
-	private string GetRegexText(Match match)
+	private string GetRegexText(Match match, byte[] portraitFile)
 	{
 		object? value = match.Value switch
 		{
@@ -153,39 +150,40 @@ public record Character : INotifyPropertyChanged
 			"{GENDER}" => Gender,
 			"{NAME}" => Name,
 			"{ALIGNMENT}" => Alignment,
+			"{PORTRAIT}" => Convert.ToBase64String(portraitFile),
 			_ => null,
 		};
 		return value?.ToString() ?? string.Empty;
 	}
-	public string FillSvgFile(string rawSvg)
-		=> Regex.Replace(rawSvg, "{.*?}", GetRegexText);
-		//=> new StringBuilder(rawSvg)
-		//.ReplaceSingle("{STR}", rawSvg, Str.DisplayValue)
-		//.ReplaceSingle("{DEX}", rawSvg, Dex.DisplayValue)
-		//.ReplaceSingle("{CON}", rawSvg, Con.DisplayValue)
-		//.ReplaceSingle("{INT}", rawSvg, Int.DisplayValue)
-		//.ReplaceSingle("{WIS}", rawSvg, Wis.DisplayValue)
-		//.ReplaceSingle("{CHA}", rawSvg, Cha.DisplayValue)
-		//.ReplaceSingle("{STR+}", rawSvg, Str.DisplayMod.AsMod())
-		//.ReplaceSingle("{DEX+}", rawSvg, Dex.DisplayMod.AsMod())
-		//.ReplaceSingle("{CON+}", rawSvg, Con.DisplayMod.AsMod())
-		//.ReplaceSingle("{INT+}", rawSvg, Int.DisplayMod.AsMod())
-		//.ReplaceSingle("{WIS+}", rawSvg, Wis.DisplayMod.AsMod())
-		//.ReplaceSingle("{CHA+}", rawSvg, Cha.DisplayMod.AsMod())
+	public string FillSvgFile(string rawSvg, byte[] portraitFile)
+		=> Regex.Replace(rawSvg, "{.*?}", m => GetRegexText(m, portraitFile));
+	//=> new StringBuilder(rawSvg)
+	//.ReplaceSingle("{STR}", rawSvg, Str.DisplayValue)
+	//.ReplaceSingle("{DEX}", rawSvg, Dex.DisplayValue)
+	//.ReplaceSingle("{CON}", rawSvg, Con.DisplayValue)
+	//.ReplaceSingle("{INT}", rawSvg, Int.DisplayValue)
+	//.ReplaceSingle("{WIS}", rawSvg, Wis.DisplayValue)
+	//.ReplaceSingle("{CHA}", rawSvg, Cha.DisplayValue)
+	//.ReplaceSingle("{STR+}", rawSvg, Str.DisplayMod.AsMod())
+	//.ReplaceSingle("{DEX+}", rawSvg, Dex.DisplayMod.AsMod())
+	//.ReplaceSingle("{CON+}", rawSvg, Con.DisplayMod.AsMod())
+	//.ReplaceSingle("{INT+}", rawSvg, Int.DisplayMod.AsMod())
+	//.ReplaceSingle("{WIS+}", rawSvg, Wis.DisplayMod.AsMod())
+	//.ReplaceSingle("{CHA+}", rawSvg, Cha.DisplayMod.AsMod())
 
-		//.ReplaceSingle("{RACE}", rawSvg, Race)
-		//.ReplaceSingle("{RACETRAIT1}", rawSvg, Race?.Traits?[0])
-		//.ReplaceSingle("{RACETRAIT2}", rawSvg, Race?.Traits?[1])
+	//.ReplaceSingle("{RACE}", rawSvg, Race)
+	//.ReplaceSingle("{RACETRAIT1}", rawSvg, Race?.Traits?[0])
+	//.ReplaceSingle("{RACETRAIT2}", rawSvg, Race?.Traits?[1])
 
-		//.ReplaceSingle("{CLASS}", rawSvg, Class)
-		//.ReplaceSingle("{SUBCLASS}", rawSvg, SubClass)
-		//.ReplaceSingle("{HPGAIN}", rawSvg, HpGain)
-		//.ReplaceSingle("{SKILLS}", rawSvg, Skillpoints)
+	//.ReplaceSingle("{CLASS}", rawSvg, Class)
+	//.ReplaceSingle("{SUBCLASS}", rawSvg, SubClass)
+	//.ReplaceSingle("{HPGAIN}", rawSvg, HpGain)
+	//.ReplaceSingle("{SKILLS}", rawSvg, Skillpoints)
 
-		//.ReplaceSingle("{GENDER}", rawSvg, Gender)
-		//.ReplaceSingle("{NAME}", rawSvg, Name)
+	//.ReplaceSingle("{GENDER}", rawSvg, Gender)
+	//.ReplaceSingle("{NAME}", rawSvg, Name)
 
-		//.ReplaceSingle("{ALIGNMENT}", rawSvg, Alignment)
+	//.ReplaceSingle("{ALIGNMENT}", rawSvg, Alignment)
 
-		//.ToString();
+	//.ToString();
 }

@@ -19,6 +19,7 @@ public class Race : CharacterElement
 	/// or <see langword="null"/> if other behaviour is expected.
 	/// </summary>
 	public (Stat amp1, Stat amp2, Stat red)? GetRaceImpactFor(Character character) => _statImpact(character);
+    public (string Male, string Female) GetPortraitFileNames() => ($"{Name}.М.png", $"{Name}.Ж.png");
 
 	public static Race Human { get; } = new("🧑", "Человек", ("Умелец", "Доп. черта"), _ => null);
     public static Race Elf { get; } = new("🧝", "Эльф", ("Инсомния", "Эльфийская чуткость"), c => (c.Dex, c.Int, c.Con));
