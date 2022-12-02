@@ -6,32 +6,67 @@
 
 <PageTitle>Персонажи</PageTitle>
 
-<p>
-	<NameGenderComponent Character=@character></NameGenderComponent>
-</p>
-
-<p>
-	<RaceComponent Character=@character></RaceComponent>
-</p>
-
-<p>
-	<ClassComponent Character=@character></ClassComponent>
-</p>
-
-<p>
-	<AlignmentComponent Character=@character></AlignmentComponent>
-</p>
-
-<p>
-	<StatCalculatorComponent Character=@character TotalPoints=44></StatCalculatorComponent>
-</p>
-
+<button @onclick=@PrevTab>⏪</button>
+@for (int i = MinTab; i < tab; i++)
+{
+	<span>@i</span>
+}
+<span style="font-size: 18px; color: seagreen">@tab</span>
+@for (int i = tab + 1; i <= MaxTab; i++)
+{
+	<span>@i</span>
+}
+<button @onclick=@NextTab>⏩</button>
+@tab
+@if (tab == 1)
+{
+	<p>
+		<NameGenderComponent Character=@character></NameGenderComponent>
+	</p>
+}
+else if (tab == 2)
+{
+	<p>
+		<RaceComponent Character=@character></RaceComponent>
+	</p>
+}
+else if (tab == 3)
+{
+	<p>
+		<ClassComponent Character=@character></ClassComponent>
+	</p>
+}
+else if (tab == 4)
+{
+	<p>
+		<AlignmentComponent Character=@character></AlignmentComponent>
+	</p>
+}
+else if (tab == 5)
+{
+	<p>
+		<StatCalculatorComponent Character=@character TotalPoints=44></StatCalculatorComponent>
+	</p>
+}
+else if (tab == 6)
+{
+	<p>Lorem ipsum dolor sit amet</p>
+}
 <p>
 	<SvgComponent Character=@character></SvgComponent>
 </p>
 
 @code {
 	private Character character = new();
+
+	private const int MinTab = 1;
+	private const int MaxTab = 6;
+
+	private int tab = 1;
+
+	private void NextTab() => tab = Math.Min(tab + 1, MaxTab);
+	private void PrevTab() => tab = Math.Max(tab - 1, MinTab);
+	private void JumpTo(int newTab) => tab = newTab is >= MinTab and <= MaxTab ? newTab : tab;
 }
 
 

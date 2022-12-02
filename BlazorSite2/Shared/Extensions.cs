@@ -1,4 +1,5 @@
 ﻿using BlazorSite2.Shared.Arklens;
+using System.Text;
 
 namespace Un1ver5e.Web.III.Shared
 {
@@ -37,5 +38,14 @@ namespace Un1ver5e.Web.III.Shared
             this IEnumerable<TElement> collection, string? name)
             where TElement : CharacterElement
             => collection.FirstOrDefault(e => e.Name == name);
+
+        public static StringBuilder ReplaceSingle(this StringBuilder builder, string originalString, string pattern, object? newValue)
+        {
+            string? replace = newValue?.ToString() ?? string.Empty;
+            int length = pattern.Length;
+            int index = originalString.IndexOf(pattern);
+
+            return builder.Replace(pattern, replace, index, length);
+        }
     }
 }

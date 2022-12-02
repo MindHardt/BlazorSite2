@@ -5,7 +5,7 @@
 @inherits CharacterComponentBase
 
 <select @onchange=@SetAlignment @onfocus=@StateHasChanged>
-	<option selected disabled hidden>Выберите мировоззрение</option>
+	<option selected disabled hidden>@(Character.Alignment?.ToString() ?? "Выберите мировоззрение")</option>
 	@foreach (Alignment alignment in AvailableAlignments)
 	{
 		<option value=@alignment.Name>@alignment.ToString()</option>

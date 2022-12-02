@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
 using Un1ver5e.Web.III.Shared;
 
 namespace BlazorSite2.Shared.Arklens;
@@ -107,35 +109,70 @@ public record Character : INotifyPropertyChanged
 	private void OnPropertyChanged([CallerMemberName] string prop = "")
 		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 
+	public int? HpGain => Class?.HpGain + Con.DisplayMod;
+	public int? Skillpoints => Class?.SkillPoints + Int.DisplayMod + (Race == Race.Human ? 1 : 0);
+
+	private string GetRegexText(Match match)
+	{
+		object? value = match.Value switch
+		{
+			"{STR}" => Str.DisplayValue,
+			"{DEX}" => Dex.DisplayValue,
+			"{CON}" => Con.DisplayValue,
+			"{INT}" => Int.DisplayValue,
+			"{WIS}" => Wis.DisplayValue,
+			"{CHA}" => Cha.DisplayValue,
+
+			"{STR+}" => Str.DisplayMod.AsMod(),
+			"{DEX+}" => Dex.DisplayMod.AsMod(),
+			"{CON+}" => Con.DisplayMod.AsMod(),
+			"{INT+}" => Int.DisplayMod.AsMod(),
+			"{WIS+}" => Wis.DisplayMod.AsMod(),
+			"{CHA+}" => Cha.DisplayMod.AsMod(),
+
+			"{RACE}" => Race,
+			"{RACETRAIT1}" => Race?.Traits?[0],
+			"{RACETRAIT2}" => Race?.Traits?[1],
+			"{CLASS}" => Class,
+			"{SUBCLASS}" => SubClass,
+			"{HPGAIN}" => HpGain,
+			"{SKILLS}" => Skillpoints,
+			"{GENDER}" => Gender,
+			"{NAME}" => Name,
+			"{ALIGNMENT}" => Alignment,
+			_ => null,
+		};
+		return value?.ToString() ?? string.Empty;
+	}
 	public string FillSvgFile(string rawSvg)
-		=> new StringBuilder(rawSvg)
-		.Replace("%STR%", Str.DisplayValue.ToString())
-		.Replace("%DEX%", Dex.DisplayValue.ToString())
-		.Replace("%CON%", Con.DisplayValue.ToString())
-		.Replace("%INT%", Int.DisplayValue.ToString())
-		.Replace("%WIS%", Wis.DisplayValue.ToString())
-		.Replace("%CHA%", Cha.DisplayValue.ToString())
+		=> Regex.Replace(rawSvg, "{.*?}", GetRegexText);
+		//=> new StringBuilder(rawSvg)
+		//.ReplaceSingle("{STR}", rawSvg, Str.DisplayValue)
+		//.ReplaceSingle("{DEX}", rawSvg, Dex.DisplayValue)
+		//.ReplaceSingle("{CON}", rawSvg, Con.DisplayValue)
+		//.ReplaceSingle("{INT}", rawSvg, Int.DisplayValue)
+		//.ReplaceSingle("{WIS}", rawSvg, Wis.DisplayValue)
+		//.ReplaceSingle("{CHA}", rawSvg, Cha.DisplayValue)
+		//.ReplaceSingle("{STR+}", rawSvg, Str.DisplayMod.AsMod())
+		//.ReplaceSingle("{DEX+}", rawSvg, Dex.DisplayMod.AsMod())
+		//.ReplaceSingle("{CON+}", rawSvg, Con.DisplayMod.AsMod())
+		//.ReplaceSingle("{INT+}", rawSvg, Int.DisplayMod.AsMod())
+		//.ReplaceSingle("{WIS+}", rawSvg, Wis.DisplayMod.AsMod())
+		//.ReplaceSingle("{CHA+}", rawSvg, Cha.DisplayMod.AsMod())
 
-		.Replace("%STR+%", Str.DisplayMod.AsMod())
-		.Replace("%DEX+%", Dex.DisplayMod.AsMod())
-		.Replace("%CON+%", Con.DisplayMod.AsMod())
-		.Replace("%INT+%", Int.DisplayMod.AsMod())
-		.Replace("%WIS+%", Wis.DisplayMod.AsMod())
-		.Replace("%CHA+%", Cha.DisplayMod.AsMod())
+		//.ReplaceSingle("{RACE}", rawSvg, Race)
+		//.ReplaceSingle("{RACETRAIT1}", rawSvg, Race?.Traits?[0])
+		//.ReplaceSingle("{RACETRAIT2}", rawSvg, Race?.Traits?[1])
 
-		.Replace("%RACE%", Race?.ToString())
-		.Replace("%RACETRAIT1%", Race?.Traits?[0])
-		.Replace("%RACETRAIT2%", Race?.Traits?[1])
+		//.ReplaceSingle("{CLASS}", rawSvg, Class)
+		//.ReplaceSingle("{SUBCLASS}", rawSvg, SubClass)
+		//.ReplaceSingle("{HPGAIN}", rawSvg, HpGain)
+		//.ReplaceSingle("{SKILLS}", rawSvg, Skillpoints)
 
-		.Replace("%CLASS%", Class?.ToString())
-		.Replace("%SUBCLASS%", SubClass?.ToString())
-		.Replace("%HPGAIN%", (Class?.HpGain + Con.DisplayMod)?.ToString())
-		.Replace("%SKILLS%", (Class?.SkillPoints + Int.DisplayMod + (Race == Race.Human ? 1 : 0))?.ToString())
+		//.ReplaceSingle("{GENDER}", rawSvg, Gender)
+		//.ReplaceSingle("{NAME}", rawSvg, Name)
 
-		.Replace("%GENDER%", Gender?.ToString())
-		.Replace("%NAME%", Name)
+		//.ReplaceSingle("{ALIGNMENT}", rawSvg, Alignment)
 
-		.Replace("%ALIGNMENT%", Alignment?.ToString())
-
-		.ToString();
+		//.ToString();
 }

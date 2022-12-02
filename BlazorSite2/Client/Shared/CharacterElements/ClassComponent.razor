@@ -4,7 +4,7 @@
 @inherits CharacterComponentBase
 
 <select @onchange=@SetClass>
-	<option selected disabled hidden>Выберите класс</option>
+	<option selected disabled hidden>@(Character.Class?.ToString() ?? "Выберите класс")</option>
 	@foreach (Class _class in Class.All)
 	{
 		<option value=@_class.Name>@_class.ToString()</option>
@@ -13,7 +13,7 @@
 @if (Character.Class?.Subclasses is not null)
 {
 	<select @onchange=@SetSubclass>
-		<option selected disabled hidden>Выберите подкласс @Character.Class.Emoji</option>
+		<option selected disabled hidden>@(Character.SubClass?.ToString() ?? $"Выберите подкласс {Character.Class.Emoji}")</option>
 		@foreach (Subclass subclass in Character.Class.Subclasses)
 		{
 			<option value=@subclass.Name>@subclass.ToString()</option>
