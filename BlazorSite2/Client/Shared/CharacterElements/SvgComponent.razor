@@ -1,6 +1,8 @@
 ﻿@using System.Text;
+@using BlazorSite2.Client.Services;
 @inject IJSRuntime JS
 @inject HttpClient Http
+@inject FilePortraitProvider portraits
 @inherits CharacterComponentBase
 
 @*<button @onclick=@ReloadSvg>🔁 обновить лист</button>*@
@@ -22,11 +24,9 @@
 	private Task ReloadSvg()
 	=> Task.Run(async () =>
 	{
-		byte[] portraitFile = Character.Race is null || Character.Gender is null ? 
-		Array.Empty<byte>() :
-		await Http.GetByteArrayAsync($"files/{Character.Race.Name}.{Character.Gender.Name[0]}.png");
+		byte[] portrait = await portraits.GetPortraitFor(Character) ?? Array.Empty<byte>();
 
-		characterSvg = Character.FillSvgFile(rawSvg ?? string.Empty, portraitFile);
+		characterSvg = Character.FillSvgFile(rawSvg ?? string.Empty, portrait);
 		this.StateHasChanged();
 	});
 

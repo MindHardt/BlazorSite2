@@ -80,6 +80,7 @@ public record Character : INotifyPropertyChanged
 			OnPropertyChanged(nameof(SubClass));
 		}
 	}
+	public Portrait Portrait { get; } = new();
 
 
 	public int? HpGain => Class?.HpGain + Con.DisplayMod;
@@ -116,6 +117,7 @@ public record Character : INotifyPropertyChanged
 		{
 			stat.PropertyChanged += (_, _) => OnPropertyChanged(nameof(stat));
 		}
+		Portrait.PropertyChanged += (_, _) => OnPropertyChanged(nameof(Portrait));
 	}
 
 
