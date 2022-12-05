@@ -1,11 +1,11 @@
 ﻿@using System.Text;
-@using BlazorSite2.Client.Services;
+@using BlazorSite2.Shared.Arklens;
+@using System.Text.RegularExpressions;
+@using Un1ver5e.Web.III.Shared;
 @inject IJSRuntime JS
 @inject HttpClient Http
-@inject FilePortraitProvider portraits
 @inherits CharacterComponentBase
 
-@*<button @onclick=@ReloadSvg>🔁 обновить лист</button>*@
 <button @onclick=@DownloadSvg disabled=@(characterSvg is null)>📲 сохранить</button>
 <br />
 @((MarkupString)(characterSvg ?? "<p>🕐...</p>"))
@@ -18,15 +18,25 @@
 	{
 		rawSvg = rawSvg ?? await Http.GetStringAsync("files/raw.svg");
 		_ = ReloadSvg();
+
+		Character.PropertyChanged += async (_, e) =>
+		{
+			if (e.PropertyName is
+			nameof(Character.Race) or
+			nameof(Character.Gender) ||
+			Character.Portrait is null)
+			{
+				await TryUpdatePortrait();
+			}
+		};
 		Character.PropertyChanged += async (_, _) => await ReloadSvg();
 	}
 
+	#region Buttons
 	private Task ReloadSvg()
-	=> Task.Run(async () =>
+	=> Task.Run(() =>
 	{
-		byte[] portrait = await portraits.GetPortraitFor(Character) ?? Array.Empty<byte>();
-
-		characterSvg = Character.FillSvgFile(rawSvg ?? string.Empty, portrait);
+		characterSvg = FillSvgFile(rawSvg ?? string.Empty);
 		this.StateHasChanged();
 	});
 
@@ -39,4 +49,63 @@
 		await JS.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
 		await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
 	}
+	#endregion
+
+	#region SvgGen
+	private string GetRegexText(Match match)
+	{
+		object? value = match.Value switch
+		{
+			"{STR}" => Character.Str.DisplayValue,
+			"{DEX}" => Character.Dex.DisplayValue,
+			"{CON}" => Character.Con.DisplayValue,
+			"{INT}" => Character.Int.DisplayValue,
+			"{WIS}" => Character.Wis.DisplayValue,
+			"{CHA}" => Character.Cha.DisplayValue,
+
+			"{STR+}" => Character.Str.DisplayMod.AsMod(),
+			"{DEX+}" => Character.Dex.DisplayMod.AsMod(),
+			"{CON+}" => Character.Con.DisplayMod.AsMod(),
+			"{INT+}" => Character.Int.DisplayMod.AsMod(),
+			"{WIS+}" => Character.Wis.DisplayMod.AsMod(),
+			"{CHA+}" => Character.Cha.DisplayMod.AsMod(),
+
+			"{RACE}" => Character.Race,
+			"{RACETRAIT1}" => Character.Race?.Traits?[0],
+			"{RACETRAIT2}" => Character.Race?.Traits?[1],
+			"{CLASS}" => Character.Class,
+			"{SUBCLASS}" => Character.Subclass,
+			"{HPGAIN}" => Character.HpGain,
+			"{SKILLS}" => Character.Skillpoints,
+			"{GENDER}" => Character.Gender,
+			"{NAME}" => Character.Name,
+			"{ALIGNMENT}" => Character.Alignment,
+			"{PORTRAIT}" => Character.Portrait?.Base64,
+			_ => null,
+		};
+		return value?.ToString() ?? string.Empty;
+	}
+
+	public string FillSvgFile(string rawSvg)
+		=> Regex.Replace(rawSvg, "{.*?}", GetRegexText);
+	#endregion
+
+	#region Portraits
+	private async ValueTask TryUpdatePortrait()
+	{
+		if (Character.Portrait is null || Character.Portrait.IsCustom is false)
+			Character.Portrait = await GetPortraitAsync();
+	}
+
+	private async ValueTask<Portrait?> GetPortraitAsync()
+	{
+		if (Character.Race is null || Character.Gender is null)
+			return null;
+
+		string fileName = $"./files/portraits/{Character.Race.Name}.{Character.Gender.Name[0]}.png";
+
+		byte[] data = await Http.GetByteArrayAsync(fileName);
+		return new Portrait(data, false);
+	}
+	#endregion
 }

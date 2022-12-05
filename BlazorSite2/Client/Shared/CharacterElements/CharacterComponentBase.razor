@@ -2,9 +2,8 @@
 
 @code {
 	protected override void OnParametersSet()
-		=> Character.PropertyChanged += (_, _) => this.StateHasChanged();
-#pragma warning disable
+	=> Character.PropertyChanged += (_, _) => this.StateHasChanged();
+
 	[Parameter]
-	public Character Character { get; set; }
-#pragma warning restore
+	public Character Character { get; set; } = null!;
 }

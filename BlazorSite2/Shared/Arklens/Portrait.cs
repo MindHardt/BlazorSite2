@@ -3,13 +3,10 @@ using System.Runtime.CompilerServices;
 
 namespace BlazorSite2.Shared.Arklens;
 
-public class Portrait : INotifyPropertyChanged
+public class Portrait
 {
 	private byte[] binary = null!;
 	private string base64 = null!;
-	private bool isCustom = false;
-
-	public event PropertyChangedEventHandler? PropertyChanged;
 
 	public byte[] Binary
 	{
@@ -18,35 +15,16 @@ public class Portrait : INotifyPropertyChanged
 		{
 			binary = value;
 			base64 = Convert.ToBase64String(binary);
-			OnPropertyChanged(nameof(Binary));
 		}
 	}
 	public string Base64 => base64;
-	public bool IsCustom => isCustom;
+	public bool IsCustom { get; }
 
-	public Portrait()
+	public Portrait(byte[] data, bool isCustom = true)
 	{
-		Binary = Array.Empty<byte>();
+		Binary = data;
+		IsCustom = isCustom;
 	}
 
-	public void TryUpdate(Character character, Func<Character, byte[]?> factory)
-	{
-		if (IsCustom is false)
-		{
-			byte[]? data = factory(character);
-
-			if (data is not null)
-			{
-				Binary = data;
-				isCustom = false;
-			}
-		}
-	}
-	public void SetCustomPortrait(byte[] image)
-	{
-		Binary= image;
-		isCustom = true;
-	}
-	private void OnPropertyChanged([CallerMemberName] string prop = "")
-	=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+	public static Portrait Empty { get; } = new(Array.Empty<byte>(), false);
 }

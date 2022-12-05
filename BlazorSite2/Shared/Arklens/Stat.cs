@@ -1,28 +1,34 @@
-﻿using System.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace BlazorSite2.Shared.Arklens;
-public class Stat : CharacterElement, INotifyPropertyChanged
+
+[INotifyPropertyChanged]
+public partial class Stat : CharacterElement
 {
 	public const int MinValue = 7;
 	public const int MaxValue = 18;
-
-	private int rawValue;
-	private bool? raceAmplified;
 
 	/// <summary>
 	/// The raw value for the stat.
 	/// <para>Can be in 3..18</para>
 	/// </summary>
-	public int RawValue 
-	{ 
-		get => rawValue; 
-		set
-		{
-			rawValue = value;
-			OnPropertyChanged(nameof(RawValue));
-		}
-	}
+	[ObservableProperty]
+	public int rawValue;
+
+	/// <summary>
+	/// Indicates whether this <see cref="Stat"/> is amplified by 
+	/// the <see cref="Character.Race"/>. This may have following values:
+	/// <para>
+	/// <see langword="true"/> if the value is increased,
+	/// <see langword="null"/> if the value is unaffected,
+	/// <see langword="false"/> if the value is decreased.
+	/// </para>
+	/// </summary>
+	[ObservableProperty]
+	private bool? raceAmplified;
 
 	/// <summary>
 	/// The modifyer of the <see cref="RawValue"/>.
@@ -34,25 +40,6 @@ public class Stat : CharacterElement, INotifyPropertyChanged
 	/// The point cost of the stat.
 	/// </summary>
 	public int TotalCost => s_upgradeCosts[CostIndex];
-
-	/// <summary>
-	/// Indicates whether this <see cref="Stat"/> is amplified by 
-	/// the <see cref="Character.Race"/>. This may have following values:
-	/// <para>
-	/// <see langword="true"/> if the value is increased,
-	/// <see langword="null"/> if the value is unaffected,
-	/// <see langword="false"/> if the value is decreased.
-	/// </para>
-	/// </summary>
-	public bool? RaceAmplified 
-	{ 
-		get => raceAmplified; 
-		set
-		{
-			raceAmplified = value;
-			OnPropertyChanged(nameof(RaceAmplified));
-		}
-	}
 
 
 	/// <summary>
@@ -133,8 +120,4 @@ public class Stat : CharacterElement, INotifyPropertyChanged
 	private int CostIndex => RawValue - MinValue;
 	private static readonly int[] s_upgradeCosts =
 	{ 0, 2, 3,   4, 5, 6,   7, 9, 11,   14, 17, 21 };
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-	private void OnPropertyChanged([CallerMemberName] string prop = "")
-		=> PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
 }

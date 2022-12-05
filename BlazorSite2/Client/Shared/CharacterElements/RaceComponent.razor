@@ -26,8 +26,10 @@
 
 	private void SetHumanBonus(ChangeEventArgs e)
 	{
-		Character.ClearRaceImpact();
-		Character.EnumerateStats().GetByName(e.Value as string)!.RaceAmplified = true;
+		foreach (Stat stat in Character.EnumerateStats())
+		{
+			stat.RaceAmplified = (stat.Name == e.Value as string) ? true : null;
+		}
 	}
 
 	private Stat? GetHumanBonusStat() 

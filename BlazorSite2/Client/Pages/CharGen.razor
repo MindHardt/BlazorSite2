@@ -7,7 +7,7 @@
 
 <PageTitle>Персонажи</PageTitle>
 
-<div tabindex="0" @ref=@Buttons @onkeydown=KeyDown>
+<div>
 	<button @onclick=@PrevTab>⏪</button>
 	@for (int i = MinTab; i < tab; i++)
 	{
@@ -20,47 +20,34 @@
 	}
 	<button @onclick=@NextTab>⏩</button>
 </div>
-@if (tab == 1)
+@switch (tab)
 {
-	<p>
-		<NameGenderComponent Character=@character></NameGenderComponent>
-	</p>
+	case 1:
+		<NameGenderComponent Character=@character />
+		break;
+	case 2:
+		<RaceComponent Character=@character />
+		break;
+	case 3:
+		<ClassComponent Character=@character />
+		break;
+	case 4:
+		<AlignmentComponent Character=@character />
+		break;
+	case 5:
+		<StatCalculatorComponent Character=@character TotalPoints=44 />
+		break;
+	case 6:
+		<CustomPortraitComponent Character=@character />
+		break;
 }
-else if (tab == 2)
-{
-	<p>
-		<RaceComponent Character=@character></RaceComponent>
-	</p>
-}
-else if (tab == 3)
-{
-	<p>
-		<ClassComponent Character=@character></ClassComponent>
-	</p>
-}
-else if (tab == 4)
-{
-	<p>
-		<AlignmentComponent Character=@character></AlignmentComponent>
-	</p>
-}
-else if (tab == 5)
-{
-	<p>
-		<StatCalculatorComponent Character=@character TotalPoints=44></StatCalculatorComponent>
-	</p>
-}
-else if (tab == 6)
-{
-	<p>Lorem ipsum dolor sit amet</p>
-}
+
 <p>
-	<SvgComponent Character=@character></SvgComponent>
+	<SvgComponent Character=@character />
 </p>
 
 @code {
 	private Character character = new();
-	private ElementReference Buttons;
 
 	private const int MinTab = 1;
 	private const int MaxTab = 6;
@@ -70,21 +57,4 @@ else if (tab == 6)
 	private void NextTab() => tab = Math.Min(tab + 1, MaxTab);
 	private void PrevTab() => tab = Math.Max(tab - 1, MinTab);
 	private void JumpTo(int newTab) => tab = newTab is >= MinTab and <= MaxTab ? newTab : tab;
-
-	private void KeyDown(KeyboardEventArgs e)
-	{
-		//Action action = e.Key switch
-		//{
-		//	"a" => () => PrevTab(),
-		//	"d" => () => NextTab(),
-		//	_ => () => { },
-		//};
-		//action();
-	}
-
-	//protected override async Task OnAfterRenderAsync(bool firstRender)
-	//{
-	//	await JS.InvokeAsync<IJSObjectReference>("import", "./js/site.js");
-	//	await JS.InvokeVoidAsync("setFocusToElement", Buttons);
-	//}
 }

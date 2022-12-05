@@ -1,0 +1,23 @@
+﻿@using BlazorSite2.Shared.Arklens;
+@using System.ComponentModel;
+@inject HttpClient Http
+@inherits CharacterComponentBase
+
+<InputFile OnChange=@(async e => await OnPortraitAdded(e)) accept="image/*"></InputFile>
+<button @onclick=@OnPortraitDropped>Удалить портрет</button>
+
+@code {
+	private async ValueTask OnPortraitAdded(InputFileChangeEventArgs e)
+	{
+		IBrowserFile image = await e.File.RequestImageFileAsync("png", 512, 512);
+
+		MemoryStream ms = new();
+		await image.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
+		byte[] data = ms.ToArray();
+
+		Character.Portrait = new(data, true);
+	}
+
+	private void OnPortraitDropped() 
+	=> Character.Portrait = null;
+}
