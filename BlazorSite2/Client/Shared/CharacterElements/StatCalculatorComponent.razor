@@ -8,7 +8,7 @@
 </p>
 <button @onclick=@AutoAssign>🔂 Автоматически</button>
 
-@foreach (Stat stat in Character.EnumerateStats())
+@foreach (Stat stat in Character.Stats)
 {
 	<p>
 		@stat.Emoji |
@@ -49,12 +49,12 @@
 			return;
 		}
 		int[] values = { 16, 14, 14, 12, 10, 8 };
-		IReadOnlyList<Stat> stats = Character.Class!.GetStatsPriorityFor(Character);
+		IReadOnlyList<Stat> stats = Character.Class.GetStatsPriorityFor(Character);
 		for (int i = 0; i < stats.Count; i++)
 		{
 			stats[i].RawValue = values[i];
 		}
 	}
 
-	private int PointsLeft => TotalPoints - Character.EnumerateStats().Sum(s => s.TotalCost);
+	private int PointsLeft => TotalPoints - Character.Stats.Sum(s => s.TotalCost);
 }

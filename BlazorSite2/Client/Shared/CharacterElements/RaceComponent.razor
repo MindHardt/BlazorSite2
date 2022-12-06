@@ -13,7 +13,7 @@
 {
 	<select @onchange=@SetHumanBonus>
 		<option selected disabled hidden>@(GetHumanBonusStat()?.ToString() ?? $"Выберите бонус {@Race.Human.Emoji}")</option>
-		@foreach (Stat stat in Character.EnumerateStats())
+		@foreach (Stat stat in Character.Stats)
 		{
 			<option value=@stat.Name>@stat.ToString()</option>
 		}
@@ -26,12 +26,9 @@
 
 	private void SetHumanBonus(ChangeEventArgs e)
 	{
-		foreach (Stat stat in Character.EnumerateStats())
-		{
-			stat.RaceAmplified = (stat.Name == e.Value as string) ? true : null;
-		}
+		Character.Stats.ApplyRaceImpact(e.Value as string);
 	}
 
-	private Stat? GetHumanBonusStat() 
-	=> Character.EnumerateStats().FirstOrDefault(s => s.RaceAmplified == true);
+	private Stat? GetHumanBonusStat()
+	=> Character.Stats.FirstOrDefault(s => s.RaceAmplified == true);
 }

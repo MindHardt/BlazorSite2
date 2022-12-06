@@ -1,14 +1,15 @@
-﻿using BlazorSite2.Shared.Arklens.Subclasses;
+﻿using BlazorSite2.Shared.Arklens.Stats;
+using BlazorSite2.Shared.Arklens.Subclasses;
 
 namespace BlazorSite2.Shared.Arklens;
 public class Class : CharacterElement
 {
-	private readonly Func<Character, Stat[]> _statsPriority;
+	private readonly Func<StatSet, Stat[]> _statsPriority;
 
 	public int HpGain { get; }
     public int SkillPoints { get; }
     public IReadOnlyList<Subclass>? Subclasses { get; }
-    private Class(string emoji, string name, int hpGain, int skillPoints, Func<Character, Stat[]> statsPriority, IReadOnlyList<Subclass>? subclasses = null) : base(emoji, name)
+    private Class(string emoji, string name, int hpGain, int skillPoints, Func<StatSet, Stat[]> statsPriority, IReadOnlyList<Subclass>? subclasses = null) : base(emoji, name)
 	{
 		HpGain = hpGain;
 		SkillPoints = skillPoints;
@@ -17,7 +18,7 @@ public class Class : CharacterElement
 	}
 
     public IReadOnlyList<Stat> GetStatsPriorityFor(Character character) 
-        => _statsPriority(character);
+        => _statsPriority(character.Stats);
 
 	public static Class Barbarian { get; } = new("😡", "Варвар", 12, 4, c => new[] { c.Str, c.Con, c.Dex, c.Wis, c.Cha, c.Int });
     public static Class Bard { get; } = new("🪕", "Бард", 8, 5, c => new[] { c.Cha, c.Dex, c.Wis, c.Con, c.Str, c.Int });

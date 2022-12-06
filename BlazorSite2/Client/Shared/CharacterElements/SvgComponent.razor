@@ -11,12 +11,12 @@
 @((MarkupString)(characterSvg ?? "<p>🕐...</p>"))
 
 @code {
-	private static string? rawSvg;
+	private string? rawSvg;
 	private string? characterSvg;
 
 	protected override async Task OnInitializedAsync()
 	{
-		rawSvg = rawSvg ?? await Http.GetStringAsync("files/raw.svg");
+		rawSvg = await Http.GetStringAsync("files/raw.svg");
 		_ = ReloadSvg();
 
 		Character.PropertyChanged += async (_, e) =>
@@ -56,19 +56,19 @@
 	{
 		object? value = match.Value switch
 		{
-			"{STR}" => Character.Str.DisplayValue,
-			"{DEX}" => Character.Dex.DisplayValue,
-			"{CON}" => Character.Con.DisplayValue,
-			"{INT}" => Character.Int.DisplayValue,
-			"{WIS}" => Character.Wis.DisplayValue,
-			"{CHA}" => Character.Cha.DisplayValue,
+			"{STR}" => Character.Stats.Str.DisplayValue,
+			"{DEX}" => Character.Stats.Dex.DisplayValue,
+			"{CON}" => Character.Stats.Con.DisplayValue,
+			"{INT}" => Character.Stats.Int.DisplayValue,
+			"{WIS}" => Character.Stats.Wis.DisplayValue,
+			"{CHA}" => Character.Stats.Cha.DisplayValue,
 
-			"{STR+}" => Character.Str.DisplayMod.AsMod(),
-			"{DEX+}" => Character.Dex.DisplayMod.AsMod(),
-			"{CON+}" => Character.Con.DisplayMod.AsMod(),
-			"{INT+}" => Character.Int.DisplayMod.AsMod(),
-			"{WIS+}" => Character.Wis.DisplayMod.AsMod(),
-			"{CHA+}" => Character.Cha.DisplayMod.AsMod(),
+			"{STR+}" => Character.Stats.Str.DisplayMod.AsMod(),
+			"{DEX+}" => Character.Stats.Dex.DisplayMod.AsMod(),
+			"{CON+}" => Character.Stats.Con.DisplayMod.AsMod(),
+			"{INT+}" => Character.Stats.Int.DisplayMod.AsMod(),
+			"{WIS+}" => Character.Stats.Wis.DisplayMod.AsMod(),
+			"{CHA+}" => Character.Stats.Cha.DisplayMod.AsMod(),
 
 			"{RACE}" => Character.Race,
 			"{RACETRAIT1}" => Character.Race?.Traits?[0],
@@ -102,10 +102,11 @@
 		if (Character.Race is null || Character.Gender is null)
 			return null;
 
-		string fileName = $"./files/portraits/{Character.Race.Name}.{Character.Gender.Name[0]}.png";
+		string fileName = $"{Character.Race.Name}.{Character.Gender.Name[0]}.png";
+		string path = $"./files/portraits/{fileName}";
 
-		byte[] data = await Http.GetByteArrayAsync(fileName);
-		return new Portrait(data, false);
+		byte[] data = await Http.GetByteArrayAsync(path);
+		return new Portrait(fileName, data, false);
 	}
 	#endregion
 }

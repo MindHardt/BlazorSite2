@@ -1,11 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace BlazorSite2.Shared.Arklens;
 
-[INotifyPropertyChanged]
+[ObservableObject]
 public partial class Stat : CharacterElement
 {
 	public const int MinValue = 7;
@@ -28,7 +25,7 @@ public partial class Stat : CharacterElement
 	/// </para>
 	/// </summary>
 	[ObservableProperty]
-	private bool? raceAmplified;
+	public bool? raceAmplified;
 
 	/// <summary>
 	/// The modifyer of the <see cref="RawValue"/>.
@@ -47,7 +44,7 @@ public partial class Stat : CharacterElement
 	/// <para>Can be in 1..20</para>
 	/// </summary>
 	public int DisplayValue => RawValue + (RaceAmplified.HasValue ? RaceAmplified.Value ? 2 : -2 : 0);
-	
+
 	/// <summary>
 	/// The modifyer of the <see cref="DisplayValue"/>.
 	/// <para>Can be in -5..+5</para>
@@ -71,7 +68,7 @@ public partial class Stat : CharacterElement
 	/// or <see langword="null"/> if the stat cannot get higher.
 	/// </summary>
 	public int? IncreaseCost => CanIncrease ? s_upgradeCosts[CostIndex + 1] - TotalCost : null;
-	
+
 	/// <summary>
 	/// Gets the amounts of points needed to decrease the value 
 	/// or <see langword="null"/> if the stat cannot get lower.

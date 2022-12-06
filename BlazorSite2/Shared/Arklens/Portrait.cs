@@ -1,30 +1,19 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace BlazorSite2.Shared.Arklens;
+﻿namespace BlazorSite2.Shared.Arklens;
 
 public class Portrait
 {
-	private byte[] binary = null!;
-	private string base64 = null!;
-
-	public byte[] Binary
-	{
-		get => binary;
-		set
-		{
-			binary = value;
-			base64 = Convert.ToBase64String(binary);
-		}
-	}
-	public string Base64 => base64;
+	public string FileName { get; }
+	public byte[] Binary { get; }
+	public string Base64 { get; }
 	public bool IsCustom { get; }
 
-	public Portrait(byte[] data, bool isCustom = true)
+	public Portrait(string fileName, byte[] data, bool isCustom = true)
 	{
+		FileName = fileName;
 		Binary = data;
+		Base64 = Convert.ToBase64String(data);
 		IsCustom = isCustom;
 	}
 
-	public static Portrait Empty { get; } = new(Array.Empty<byte>(), false);
+	public static Portrait Empty { get; } = new("-", Array.Empty<byte>(), false);
 }

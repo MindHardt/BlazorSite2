@@ -15,7 +15,7 @@
 		await image.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
 		byte[] data = ms.ToArray();
 
-		Character.Portrait = new(data, true);
+		Character.Portrait = new(image.Name, data, true);
 	}
 
 	private void OnPortraitDropped() 
