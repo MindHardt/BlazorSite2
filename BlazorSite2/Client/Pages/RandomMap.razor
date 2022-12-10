@@ -32,13 +32,16 @@
 		⏩<br />
 	</button>
 
+	@*InstantLink*@
+	<a href=@GetPanoramaUrl() target="_blank">Ссылка</a>
+
 	@*Panorama*@
 	<details open>
 		<summary class="main-text">Панорама</summary>
 		<iframe src=@GetPanoramaWidgetUrl() width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>
 	</details>
 
-	@*Spoiler	*@
+	@*Spoiler*@
 	<details>
 		<summary class="main-text">Спойлер к панораме</summary>
 		<iframe src=@GetPositionWidgetUrl() width="560" height="400" frameborder="1" allowfullscreen="true"></iframe>
@@ -59,8 +62,10 @@
 	private float GetOffset() => (Random.Shared.NextSingle() - 0.5f) * 2;
 	private string? Format(float? coords) => coords.HasValue ? coords.Value.ToString("0.000000", CultureInfo.InvariantCulture) : null;
 
+	private string? GetPanoramaUrl() =>
+		$"https://yandex.ru/maps/213/moscow/?l=stv%2Csta&ll={Format(current?.lat)}%2C{Format(current?.lon)}&panorama%5Bdirection%5D=0.0%2C0.0&panorama%5Bfull%5D=true&panorama%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&panorama%5Bspan%5D=99.608853%2C60.000000&z=100";
 	private string? GetPanoramaWidgetUrl() =>
-		$"https://yandex.ru/map-widget/v1/?ll={Format(current?.lat)}%2C{Format(current?.lon)}&panorama%5Bdirection%5D=0.000000%2C0.000000&panorama%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&z=100";
+		$"https://yandex.ru/map-widget/v1/?ll={Format(current?.lat)}%2C{Format(current?.lon)}&panorama%5Bdirection%5D=0.0%2C0.0&panorama%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&z=100";
 	private string GetAreaWidgetUrl() =>
 		$"https://yandex.ru/map-widget/v1/?ll={Format(anchor.lat)}%2C{Format(anchor.lon)}&rl={Format(anchor.lat)}%2C{Format(anchor.lon)}" +
 
@@ -71,7 +76,7 @@
 		$"~{Format(offset.lat * 2)}%2C0.000000" +
 		"&z=10";
 	private string? GetPositionWidgetUrl() =>
-		$"https://yandex.ru/map-widget/v1/?ll=0.0%2C0.0&mode=whatshere&whatshere%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&whatshere%5Bzoom%5D=20&z=20";
+		$"https://yandex.ru/map-widget/v1/?ll={Format(current?.lat)}%2C{Format(current?.lon)}&mode=whatshere&whatshere%5Bpoint%5D={Format(current?.lat)}%2C{Format(current?.lon)}&whatshere%5Bzoom%5D=20&z=20";
 
 
 	private void RandomizePosition()
