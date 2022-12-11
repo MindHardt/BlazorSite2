@@ -1,0 +1,17 @@
+﻿@using BlazorSite2.Shared.Arklens.Skills;
+@inherits CharacterComponentBase
+
+@foreach (Skill skill in Character.Skills)
+{
+	<p>
+		@skill.Emoji @skill.Name
+		<input type="number" min=0 max="@Character.Level" @bind-value=@skill.Points />
+		_@(skill.GetStat(Character).Emoji)_
+		@(skill.IsClass(Character) is true ? "✅" : "❌")
+		==@skill.CalculateValueFor(Character);
+	</p>
+}
+
+@code {
+
+}

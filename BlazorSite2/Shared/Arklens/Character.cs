@@ -1,4 +1,5 @@
-﻿using BlazorSite2.Shared.Arklens.Stats;
+﻿using BlazorSite2.Shared.Arklens.Skills;
+using BlazorSite2.Shared.Arklens.Stats;
 using BlazorSite2.Shared.Arklens.Subclasses;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.ComponentModel;
@@ -37,9 +38,15 @@ public partial class Character
 	public Portrait? _portrait;
 
 	public StatSet Stats { get; } = new();
+	public SkillSet Skills { get; } = new();
+
+	public int Level { get; set; } = 1;
 
 	public int? HpGain => Class?.HpGain + Stats.Con.DisplayMod;
-	public int? Skillpoints => Class?.SkillPoints + Stats.Int.DisplayMod + (Race == Race.Human ? 1 : 0);
+	public int? Health => HpGain * Level;
+
+	public int? SkillGain => Class?.SkillPoints + Stats.Int.DisplayMod + (Race == Race.Human ? 1 : 0);
+	public int? Skillpoints => SkillGain * Level;
 
 	public Character()
 	{

@@ -49,7 +49,7 @@
 			return;
 		}
 		int[] values = { 16, 14, 14, 12, 10, 8 };
-		IReadOnlyList<Stat> stats = Character.Class.GetStatsPriorityFor(Character);
+		IReadOnlyList<Stat> stats = Character.Class.GetStatsPriority(Character);
 		for (int i = 0; i < stats.Count; i++)
 		{
 			stats[i].RawValue = values[i];

@@ -40,6 +40,9 @@
 	case 6:
 		<CustomPortraitComponent Character=@character />
 		break;
+	case 7:
+		<SkillsComponent Character=@character />
+		break;
 }
 
 <p>
@@ -50,7 +53,7 @@
 	private Character character = new();
 
 	private const int MinTab = 1;
-	private const int MaxTab = 6;
+	private const int MaxTab = 7;
 
 	private int tab = 1;
 

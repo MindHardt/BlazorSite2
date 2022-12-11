@@ -31,17 +31,13 @@
             other.Emoji == Emoji;
 
         public override int GetHashCode()
-        {
-            return HashCode.Combine(Emoji, Name);
-        }
+            => HashCode.Combine(Emoji, Name);
 
         public static bool operator ==(CharacterElement? left, CharacterElement? right)
             => Equals(left, right);
 
         public static bool operator !=(CharacterElement? left, CharacterElement? right)
             => !Equals(left, right);
-
-
 
         public bool Equals(CharacterElement? other) => Equals(other);
     }

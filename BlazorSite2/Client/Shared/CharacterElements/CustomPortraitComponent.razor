@@ -3,7 +3,7 @@
 @inject HttpClient Http
 @inherits CharacterComponentBase
 
-<InputFile OnChange=@(async e => await OnPortraitAdded(e)) accept="image/*"></InputFile>
+<InputFile OnChange=@(async e => await OnPortraitAdded(e)) accept="image/*">@Character.Portrait.FileName</InputFile>
 <button @onclick=@OnPortraitDropped>Удалить портрет</button>
 
 @code {

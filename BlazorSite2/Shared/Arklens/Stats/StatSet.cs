@@ -7,7 +7,7 @@ namespace BlazorSite2.Shared.Arklens.Stats
 	[ObservableObject]
 	public partial class StatSet : IEnumerable<Stat>
 	{
-		private readonly IReadOnlyList<Stat> stats;
+		private readonly IReadOnlyList<Stat> _stats;
 
 		public Stat Str { get; } = new(Stat.MinValue, "💪", "СИЛ");
 		public Stat Dex { get; } = new(Stat.MinValue, "🏃‍", "ЛВК");
@@ -18,16 +18,16 @@ namespace BlazorSite2.Shared.Arklens.Stats
 
 		public StatSet()
 		{
-			stats = new[] { Str, Dex, Con, Int, Wis, Cha };
+			_stats = new[] { Str, Dex, Con, Int, Wis, Cha };
 			foreach (Stat stat in this)
 				stat.PropertyChanged += (_, e) => OnPropertyChanged(e);
 		}
 
 		public IEnumerator<Stat> GetEnumerator()
-			=> stats.GetEnumerator();
+			=> _stats.GetEnumerator();
 
 		IEnumerator IEnumerable.GetEnumerator()
-			=> stats.GetEnumerator();
+			=> _stats.GetEnumerator();
 
 		/// <summary>
 		/// Applies <see cref="Race"/> impact of <paramref name="race"/>

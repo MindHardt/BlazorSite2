@@ -1,6 +1,7 @@
 ﻿@using System.Text;
 @using BlazorSite2.Shared.Arklens;
 @using System.Text.RegularExpressions;
+@using System.Reflection;
 @using Un1ver5e.Web.III.Shared;
 @inject IJSRuntime JS
 @inject HttpClient Http
@@ -14,19 +15,20 @@
 	private string? rawSvg;
 	private string? characterSvg;
 
-	protected override async Task OnInitializedAsync()
+	protected override void OnInitialized()
 	{
-		rawSvg = await Http.GetStringAsync("files/raw.svg");
+		rawSvg = Encoding.UTF8.GetString(Properties.Resources.CharacterFront);
+
 		_ = ReloadSvg();
 
-		Character.PropertyChanged += async (_, e) =>
+		Character.PropertyChanged += (_, e) =>
 		{
 			if (e.PropertyName is
 			nameof(Character.Race) or
 			nameof(Character.Gender) ||
 			Character.Portrait is null)
 			{
-				await TryUpdatePortrait();
+				TryUpdatePortrait();
 			}
 		};
 		Character.PropertyChanged += async (_, _) => await ReloadSvg();
@@ -76,7 +78,7 @@
 			"{CLASS}" => Character.Class,
 			"{SUBCLASS}" => Character.Subclass,
 			"{HPGAIN}" => Character.HpGain,
-			"{SKILLS}" => Character.Skillpoints,
+			"{SKILLS}" => Character.SkillGain,
 			"{GENDER}" => Character.Gender,
 			"{NAME}" => Character.Name,
 			"{ALIGNMENT}" => Character.Alignment,
@@ -91,21 +93,23 @@
 	#endregion
 
 	#region Portraits
-	private async ValueTask TryUpdatePortrait()
+	private void TryUpdatePortrait()
 	{
 		if (Character.Portrait is null || Character.Portrait.IsCustom is false)
-			Character.Portrait = await GetPortraitAsync();
+			Character.Portrait = GetPortrait();
 	}
 
-	private async ValueTask<Portrait?> GetPortraitAsync()
+	private Portrait? GetPortrait()
 	{
 		if (Character.Race is null || Character.Gender is null)
 			return null;
 
-		string fileName = $"{Character.Race.Name}.{Character.Gender.Name[0]}.png";
-		string path = $"./files/portraits/{fileName}";
+		string fileName = $"{Character.Race.Name}.{Character.Gender.Name[0]}";
 
-		byte[] data = await Http.GetByteArrayAsync(path);
+		if (Character.Portrait?.FileName == fileName)
+			return Character.Portrait;
+
+		var data = (byte[])Properties.Resources.ResourceManager.GetObject(fileName)!;
 		return new Portrait(fileName, data, false);
 	}
 	#endregion
